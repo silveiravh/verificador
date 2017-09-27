@@ -1,0 +1,12 @@
+new rand[5] : a;
+print("first a:");
+a.show();
+a.size() : b;
+a.at(2) : c;
+println("");
+print("a:");
+a.show();
+println("");
+print("b:",b);
+println("");
+print("c:",c);
