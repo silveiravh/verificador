@@ -37,4 +37,18 @@ public class State {
             }
         }
     }
+    
+    public static void printStates() {
+        System.out.println("Estados:");
+        for(State s : S) {
+            System.out.print("Nome: "+s.name);
+            if(s.i) {
+                System.out.println(" inicial");
+            }
+            else if(s.f) {
+                System.out.println(" final");
+            }
+        }
+        System.out.println("");
+    }
 }

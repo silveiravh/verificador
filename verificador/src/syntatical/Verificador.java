@@ -8,8 +8,11 @@ package syntatical;
 import java.io.IOException;
 import java.util.ArrayList;
 import semantical.Letter;
+import static semantical.Letter.printLetters;
 import semantical.State;
+import static semantical.State.printStates;
 import semantical.Transition;
+import static semantical.Transition.printTransitions;
 
 /**
  *
@@ -36,6 +39,10 @@ public class Verificador {
         try {
             LexicalAnalysis l = new LexicalAnalysis(args[0]);
             SyntaticalAnalysis s = new SyntaticalAnalysis((l));
+            s.procAf();
+            printStates();
+            printLetters();
+            printTransitions();
         } catch (Exception e) {
             System.err.println(e.getMessage());
         }

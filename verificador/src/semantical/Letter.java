@@ -5,6 +5,8 @@
  */
 package semantical;
 
+import static syntatical.Verificador.L;
+
 /**
  *
  * @author silveira
@@ -14,5 +16,13 @@ public class Letter {
     
     public Letter(char symbol) {
         this.symbol = symbol;
+    }
+    
+    public static void printLetters() {
+        System.out.println("Letras: ");
+        for(Letter l : L) {
+            System.out.println("Symbol: "+l.symbol);
+        }
+        System.out.println("");
     }
 }

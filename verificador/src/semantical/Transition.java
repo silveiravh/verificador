@@ -5,6 +5,8 @@
  */
 package semantical;
 
+import static syntatical.Verificador.T;
+
 /**
  *
  * @author silveira
@@ -18,5 +20,12 @@ public class Transition {
         this.from = from;
         this.letter = letter;
         this.to = to;
+    }
+    
+    public static void printTransitions() {
+        System.out.println("Transições");
+        for(Transition t : T) {
+            System.out.println("from: "+t.from+" to "+t.to+" consuming "+t.letter);
+        }
     }
 }

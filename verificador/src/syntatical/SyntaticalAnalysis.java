@@ -60,7 +60,7 @@ public class SyntaticalAnalysis {
     }
     
     // <af> ::= '{' '"' af '"' ':' '[' <states> ',' <letters> ',' <transitions> ',' <inicials> ',' <finals> ']' '}' 
-    private void procAf() throws IOException {
+    public void procAf() throws IOException {
         matchToken(TokenType.CBRA_OPEN);
         matchToken(TokenType.QUOTATION_MARK);
         matchToken(TokenType.AF);
