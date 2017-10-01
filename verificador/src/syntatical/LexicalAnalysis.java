@@ -13,7 +13,7 @@ import java.io.PushbackInputStream;
  *
  * @author silveira
  */
-public class LexicalAnalysis {
+public class LexicalAnalysis implements AutoCloseable{
     protected int line;
     private PushbackInputStream input;
     private SymbolTable st = new SymbolTable();
