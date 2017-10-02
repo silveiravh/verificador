@@ -34,6 +34,15 @@ public class Transition {
         return to;
     }
     
+    public static boolean isVisited(Transition transition) {
+        for (Transition t : T) {
+            if(t.from.getName().equals(transition.from().getName()) && t.letter.getSymbol()==transition.letter.getSymbol() && t.to.getName().equals(transition.to.getName())) {
+                return true;
+            }
+        }
+        return false;
+    }
+    
     public static void printTransitions() {
         System.out.println("Transições");
         for(Transition t : T) {

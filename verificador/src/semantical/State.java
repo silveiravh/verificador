@@ -26,8 +26,8 @@ public class State {
         return name;
     }
     
-    public boolean getInicial() {
-        return i;
+    public boolean isInicial() {
+        return this.i;
     }
     
     public static void setInicial(State state) {
@@ -36,6 +36,10 @@ public class State {
                 s.i = true;
             }
         }
+    }
+    
+    public boolean isFinal() {
+        return this.f;
     }
     
     public static void setFinal(State state) {
