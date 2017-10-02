@@ -17,6 +17,10 @@ public class Letter {
     public Letter(char symbol) {
         this.symbol = symbol;
     }
+
+    public char getSymbol() {
+        return symbol;
+    }
     
     public static void printLetters() {
         System.out.println("Letras: ");

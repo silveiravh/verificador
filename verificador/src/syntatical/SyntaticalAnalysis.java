@@ -14,6 +14,7 @@ import java.util.HashMap;
 import java.util.Map;
 import static semantical.State.setFinal;
 import static semantical.State.setInicial;
+import static syntatical.LexicalAnalysis.line;
 import static syntatical.Verificador.S;
 import static syntatical.Verificador.L;
 import static syntatical.Verificador.T;
@@ -33,207 +34,187 @@ public class SyntaticalAnalysis {
         this.current = lex.nextToken();
     }
     
-    private void showError(){
-        if(current.type == TokenType.END_OF_FILE){
-            errorUnexpectedEOF();
-        }else{
-            errorUnexpectedToken(current.token);
-        }
-    }
-    
-    private void errorUnexpectedToken(String token){
-        System.out.println(lex.line+": Lexema não esperado ["+token+"]");
-        System.exit(1);
-    }
-    
-    private void errorUnexpectedEOF(){
-        System.out.println(lex.line+": Fim de arquivo inesperado");
-        System.exit(1);
-    }
-    
     private void matchToken(TokenType type) throws IOException{
-        if(type == current.type){
-            current = lex.nextToken();
-        }else{
-            showError();
+        try {
+            if(type == current.type){
+                current = lex.nextToken();
+            }
+            else {
+                throw new IOException(line+": Lexama não esperado ["+current.token+"]"+current.type+"esperado: "+type);
+            }
+        } catch(IOException e) {
+            System.out.println(e.getMessage());
         }
+        
     }
     
-    // <af> ::= '{' '"' af '"' ':' '[' <states> ',' <letters> ',' <transitions> ',' <inicials> ',' <finals> ']' '}' 
+    // <af> ::= '{' "af" ':' '[' <states> ',' <letters> ',' <transitions> ',' <inicials> ',' <finals> ']' '}' 
     public void procAf() throws IOException {
         matchToken(TokenType.CBRA_OPEN);
-        matchToken(TokenType.QUOTATION_MARK);
+        System.out.println("af: "+current.token);
         matchToken(TokenType.AF);
-        matchToken(TokenType.QUOTATION_MARK);
         matchToken(TokenType.COLON);
         matchToken(TokenType.SBRA_OPEN);
+        System.out.println("state: "+current.token);
         S = procStates();
+        matchToken(TokenType.COMMA);
+        System.out.println("Before letters:"+current.token);
         L = procLetters();
+        System.out.println("Before transition: "+current.token);
+        matchToken(TokenType.COMMA);
         T = procTransitions();
+        matchToken(TokenType.COMMA);
         I = procInicials();
+        matchToken(TokenType.COMMA);
         F = procFinals();
         matchToken(TokenType.SBRA_CLOSE);
         matchToken(TokenType.CBRA_CLOSE);
     }
     
-    //<states> ::= '[' '"' <state> '"' {, '"' <state> '"'} ']'
+    //<states> ::= '[' <state> {, <state> } ']'
     private ArrayList<State> procStates() throws IOException {
-        matchToken(TokenType.SBRA_OPEN);
-        matchToken(TokenType.QUOTATION_MARK);
-        State s = procState();
-        S.add(s);
-        matchToken(TokenType.QUOTATION_MARK);
-        while(this.current.type==TokenType.COMMA) {
-            matchToken(TokenType.COMMA);
-            matchToken(TokenType.QUOTATION_MARK);
-            s = procState();
+        try {
+            matchToken(TokenType.SBRA_OPEN);
+            State s = procState();
             S.add(s);
-            matchToken(TokenType.QUOTATION_MARK);
+            while(this.current.type==TokenType.COMMA) {
+                matchToken(TokenType.COMMA);
+                s = procState();
+                S.add(s);
+            }
+            if(this.current.type==TokenType.SBRA_CLOSE) {
+                matchToken(TokenType.SBRA_CLOSE);
+            }
+        } catch(IOException e) {
+            System.out.println(e.getMessage());
         }
-        if(this.current.type==TokenType.SBRA_CLOSE) {
-            matchToken(TokenType.SBRA_CLOSE);
-        }
-        else {
-            showError();
-        }
+        
         return S;
     }
     
     private State procState() throws IOException {
-        if(this.current.type==TokenType.STATE) {
-            State s = new State(current.token);
-            matchToken(TokenType.STATE);
-            return s;
+        try {
+            if(this.current.type==TokenType.STATE) {
+                State s = new State(current.token);
+                matchToken(TokenType.STATE);
+                return s;
+            }
+        } catch(IOException e) {
+            System.out.println(e.getMessage());
         }
-        else {
-            showError();
-            return null;
-        }
+        return null;
     }
     
-    //<letters> ::= '[' '"' <letter> '"' {, '"' <letter> '"'} ']'
+    //<letters> ::= '[' <letter> {, <letter> } ']'
     private ArrayList<Letter> procLetters() throws IOException {
-        matchToken(TokenType.SBRA_OPEN);
-        matchToken(TokenType.QUOTATION_MARK);
-        Letter l = procLetter();
-        L.add(l);
-        matchToken(TokenType.QUOTATION_MARK);
-        while(this.current.type==TokenType.COMMA) {
-            matchToken(TokenType.COMMA);
-            matchToken(TokenType.QUOTATION_MARK);
-            l = procLetter();
+        try {
+            matchToken(TokenType.SBRA_OPEN);
+            Letter l = procLetter();
             L.add(l);
-            matchToken(TokenType.QUOTATION_MARK);
+            while(this.current.type==TokenType.COMMA) {
+                matchToken(TokenType.COMMA);
+                l = procLetter();
+                L.add(l);
+            }
+            if(this.current.type==TokenType.SBRA_CLOSE) {
+                matchToken(TokenType.SBRA_CLOSE);
+                return L;
+            }
+        } catch(IOException e) {
+            System.out.println(e.getMessage());
         }
-        if(this.current.type==TokenType.SBRA_CLOSE) {
-            matchToken(TokenType.SBRA_CLOSE);
-            return L;
-        }
-        else {
-            showError();
-            return null;
-        }
+        return null;
     }
    
     private Letter procLetter() throws IOException {
-        if(this.current.type==TokenType.LETTER) {
-            Letter l = new Letter(current.token.charAt(0));
-            matchToken(TokenType.LETTER);
-            return l;
+        try {
+            if(this.current.type==TokenType.LETTER) {
+                Letter l = new Letter(current.token.charAt(0));
+                matchToken(TokenType.LETTER);
+                return l;
+            }
+        } catch(IOException e) {
+            System.out.println(e.getMessage());
         }
-        else {
-            showError();
-            return null;
-        }
+        return null;
     }
     
-    //<transitions> ::= '[' '"' <state> '"' ',' '"' <letter> '"' ',' '"' <state> '"' ']' {, '[' '"' <state> '"' ',' '"' <letter> '"' ',' '"' <state> '"' ']'}
+    //<transitions> ::= '[' <state> ',' <letter> ',' <state> ']' {, '[' <state> ',' <letter> ',' <state> ']'}
     private ArrayList<Transition> procTransitions() throws IOException {
-        matchToken(TokenType.SBRA_CLOSE);
-        matchToken(TokenType.QUOTATION_MARK);
-        State from = procState();
-        matchToken(TokenType.QUOTATION_MARK);
-        matchToken(TokenType.COMMA);
-        matchToken(TokenType.QUOTATION_MARK);
-        Letter letter = procLetter();
-        matchToken(TokenType.QUOTATION_MARK);
-        matchToken(TokenType.COMMA);
-        matchToken(TokenType.QUOTATION_MARK);
-        State to = procState();
-        matchToken(TokenType.QUOTATION_MARK);
-        Transition t = new Transition(from, letter, to);
-        T.add(t);
-        while(this.current.type==TokenType.COMMA) {
+        try {
+            System.out.println("Current: "+current.token);
+            matchToken(TokenType.SBRA_OPEN);
+            matchToken(TokenType.SBRA_OPEN);
+            State from = procState();
+            System.out.println(from);
             matchToken(TokenType.COMMA);
-            matchToken(TokenType.QUOTATION_MARK);
-            from = procState();
-            matchToken(TokenType.QUOTATION_MARK);
+            Letter letter = procLetter();
             matchToken(TokenType.COMMA);
-            matchToken(TokenType.QUOTATION_MARK);
-            letter = procLetter();
-            matchToken(TokenType.QUOTATION_MARK);
-            matchToken(TokenType.COMMA);
-            matchToken(TokenType.QUOTATION_MARK);
-            to = procState();
-            matchToken(TokenType.QUOTATION_MARK);
-            t = new Transition(from, letter, to);
+            State to = procState();
+            Transition t = new Transition(from, letter, to);
             T.add(t);
-        }
-        if(this.current.type==TokenType.SBRA_CLOSE) {
             matchToken(TokenType.SBRA_CLOSE);
-            return T;
+            while(this.current.type==TokenType.COMMA) {
+                matchToken(TokenType.COMMA);
+                matchToken(TokenType.SBRA_OPEN);
+                from = procState();
+                matchToken(TokenType.COMMA);
+                letter = procLetter();
+                matchToken(TokenType.COMMA);
+                to = procState();
+                t = new Transition(from, letter, to);
+                T.add(t);
+                matchToken(TokenType.SBRA_CLOSE);
+            }
+            if(this.current.type==TokenType.SBRA_CLOSE) {
+                matchToken(TokenType.SBRA_CLOSE);
+                return T;
+            }
+        } catch(IOException e) {
+            System.out.println(e.getMessage());
         }
-        else {
-            showError();
-            return null;
-        }
+        return null;
     }
     
-    //<inicials> ::= '[' '"' <state> '"' {, '"' <state> '"'} ']'
+    //<inicials> ::= '['<state> {, <state> '} ']'
     private ArrayList<State> procInicials() throws IOException {
-        matchToken(TokenType.SBRA_OPEN);
-        matchToken(TokenType.QUOTATION_MARK);
-        State s = procState();
-        setInicial(s);
-        matchToken(TokenType.QUOTATION_MARK);
-        while(this.current.type==TokenType.COMMA) {
-            matchToken(TokenType.COMMA);
-            matchToken(TokenType.QUOTATION_MARK);
-            s = procState();
+        try {
+            matchToken(TokenType.SBRA_OPEN);
+            State s = procState();
             setInicial(s);
-            matchToken(TokenType.QUOTATION_MARK);
+            while(this.current.type==TokenType.COMMA) {
+                matchToken(TokenType.COMMA);
+                s = procState();
+                setInicial(s);
+            }
+            if(this.current.type==TokenType.SBRA_CLOSE) {
+                matchToken(TokenType.SBRA_CLOSE);
+                return S;
+            }
+        } catch(IOException e) {
+            System.out.println(e.getMessage());
         }
-        if(this.current.type==TokenType.SBRA_CLOSE) {
-            matchToken(TokenType.SBRA_CLOSE);
-            return S;
-        }
-        else {
-            showError();
-            return null;
-        }
+        return null;
     }
     
-    //<finals> ::= '[' '"' <state> '"' {, '"' <state> '"'} ']'
+    //<finals> ::= '[' <state> {, <state> } ']'
     private ArrayList<State> procFinals() throws IOException  {
-        matchToken(TokenType.SBRA_OPEN);
-        matchToken(TokenType.QUOTATION_MARK);
-        State s = procState();
-        setFinal(s);
-        matchToken(TokenType.QUOTATION_MARK);
-        while(this.current.type==TokenType.COMMA) {
-            matchToken(TokenType.COMMA);
-            matchToken(TokenType.QUOTATION_MARK);
-            s = procState();
+        try {
+            matchToken(TokenType.SBRA_OPEN);
+            State s = procState();
             setFinal(s);
-            matchToken(TokenType.QUOTATION_MARK);
+            while(this.current.type==TokenType.COMMA) {
+                matchToken(TokenType.COMMA);
+                s = procState();
+                setFinal(s);
+            }
+            if(this.current.type==TokenType.SBRA_CLOSE) {
+                matchToken(TokenType.SBRA_CLOSE);
+                return S;
+            }
+        } catch(IOException e) {
+            System.out.println(e.getMessage());
         }
-        if(this.current.type==TokenType.SBRA_CLOSE) {
-            matchToken(TokenType.SBRA_CLOSE);
-            return S;
-        }
-        else {
-            showError();
-            return null;
-        }
+        return null;
     }
 }

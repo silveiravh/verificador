@@ -19,7 +19,6 @@ public class SymbolTable {
     public SymbolTable() {
         st = new HashMap<>();
         
-        st.put("\"", TokenType.QUOTATION_MARK);
         st.put("{" , TokenType.CBRA_OPEN);
         st.put("}" ,TokenType.CBRA_CLOSE);
         st.put(":", TokenType.COLON);
@@ -28,5 +27,14 @@ public class SymbolTable {
         st.put(",", TokenType.COMMA);
         
         st.put("af", TokenType.AF);
+    }
+    
+    public boolean contains(String token) {
+        return st.containsKey(token);
+    }
+
+    public TokenType find(String token) {
+        return this.contains(token) ?
+            st.get(token) : TokenType.INVALID_TOKEN;
     }
 }

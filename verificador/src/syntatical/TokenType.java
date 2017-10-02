@@ -16,7 +16,6 @@ public enum TokenType {
     END_OF_FILE,
 
     // symbols
-    QUOTATION_MARK, // "
     CBRA_OPEN,      // {
     CBRA_CLOSE,     // }
     COLON,          // :

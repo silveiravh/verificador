@@ -25,7 +25,7 @@ public class Transition {
     public static void printTransitions() {
         System.out.println("Transições");
         for(Transition t : T) {
-            System.out.println("from: "+t.from+" to "+t.to+" consuming "+t.letter);
+            System.out.println("from: "+t.from.getName()+" to "+t.to.getName()+" consuming "+t.letter.getSymbol());
         }
     }
 }

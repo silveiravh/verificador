@@ -21,6 +21,10 @@ public class State {
         this.i = false;
         this.f = false;
     }
+
+    public String getName() {
+        return name;
+    }
     
     public static void setInicial(State state) {
         for(State s : S) {
