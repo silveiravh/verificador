@@ -30,10 +30,7 @@ public class Verificador {
     public static ArrayList<State> I = new ArrayList<State>();
     public static ArrayList<State> F = new ArrayList<State>();
     
-    private static Stack<Transition> possibilities = new Stack<Transition>();
     private static Stack<Transition> path = new Stack<Transition>();
-    private static Stack<Transition> visited = new Stack<Transition>();
-    private static Stack<Integer> popOrder = new Stack<Integer>();
     
     protected static String word="";
     private static State currentState;
@@ -49,7 +46,7 @@ public class Verificador {
 
         try {
             LexicalAnalysis l = new LexicalAnalysis(args[0]);
-            SyntaticalAnalysis s = new SyntaticalAnalysis((l));
+            SyntaticalAnalysis s = new SyntaticalAnalysis(l);
             s.procAf();
             printStates();
             printLetters();
@@ -73,98 +70,53 @@ public class Verificador {
         
         for(State i : inicials) {
             currentState = i;
-            int possibilitiesNumber = 0;
-            ArrayList<Transition> lambdaTransitions = getLambda(i);
-            //possibilitiesNumber += lambdaTransitions.size();
-            for(Transition t1 : lambdaTransitions) {
-                if(!isVisited(t1)) {
-                    possibilities.push(t1);
-                    possibilitiesNumber++;
-                }
-            }
-            ArrayList<Transition> transitions = getTransitions(i, getNextLetter(word));
-            //possibilitiesNumber += transitions.size();
-            for(Transition t2 : transitions) {
-                if(isVisited(t2)) {
-                    possibilities.push(t2);
-                    possibilitiesNumber++;
-                }
-            }
-            if(possibilitiesNumber==0) {
-                System.out.println("Não");
-                return;
-            }
-            if(possibilitiesNumber>=2) {
-                popOrder.push(possibilities.size());
-            }
-            Transition t = possibilities.pop();
-            path.push(t);
-            currentState = doTransition(t);
-            if(word.isEmpty() && currentState.isFinal()) {
+            if(findPath(word)) {
                 System.out.println("Sim");
-                return;
             }
-            else if(word.isEmpty() && !currentState.isFinal() && possibilities.size()==0) {
+            else {
                 System.out.println("Não");
-            }
-            else if(word.isEmpty() && !currentState.isFinal() && possibilities.size()!=0) {
-                int backTransitionsNumber = popOrder.pop();
-                while(path.size()!=backTransitionsNumber) {
-                    Transition backTransition = path.pop();
-                    currentState = undoTransition(backTransition);
-                    if(path.size()==backTransitionsNumber-1) {
-                        visited.add(t);
-                    }
-                }
-            }
-            
-            while(!word.isEmpty()) {
-                possibilitiesNumber = 0;
-                lambdaTransitions = getLambda(i);
-                //possibilitiesNumber += lambdaTransitions.size();
-                for(Transition t3 : lambdaTransitions) {
-                    if(!isVisited(t3)) {
-                        possibilities.push(t3);
-                        possibilitiesNumber++;
-                    }
-                }
-                transitions = getTransitions(i, getNextLetter(word));
-                //possibilitiesNumber += transitions.size();
-                for(Transition t4 : transitions) {
-                    if(!isVisited(t4)) {
-                        possibilities.push(t4);
-                        possibilitiesNumber++;
-                    }
-                }
-                if(possibilitiesNumber==0) {
-                    System.out.println("Não");
-                    return;
-                }
-                if(possibilitiesNumber>=2) {
-                    popOrder.push(possibilities.size());
-                }
-                t = possibilities.pop();
-                path.push(t);
-                currentState = doTransition(t);
-                if(word.isEmpty() && currentState.isFinal()) {
-                    System.out.println("Sim");
-                    return;
-                }
-                else if(word.isEmpty() && !currentState.isFinal() && possibilities.size()==0) {
-                    System.out.println("Não");
-                }
-                else if(word.isEmpty() && !currentState.isFinal() && possibilities.size()!=0) {
-                    int backTransitionsNumber = popOrder.pop();
-                    while(path.size()!=backTransitionsNumber) {
-                        Transition backTransition = path.pop();
-                        currentState = undoTransition(backTransition);
-                        if(path.size()==backTransitionsNumber-1) {
-                        visited.add(t);
-                        }
-                    }
-                }
             }
         }
+    }
+    
+    static Stack<Transition> visited = new Stack<Transition>();
+    static Stack<Transition> possibilities = new Stack<Transition>();
+    
+    public static boolean findPath(String w){
+        
+        
+        
+        ArrayList<Transition> lambdaTransitions = getLambdaTransitions(currentState, T);
+        for(Transition t : lambdaTransitions) {
+            if(!visited.contains(t))
+                possibilities.push(t);
+        }
+        ArrayList<Transition> letterTransitions = getTransitions(currentState, getNextLetter(word), T);
+        for(Transition t : letterTransitions) {
+           possibilities.push(t);
+        }
+        
+        if(w.isEmpty() && currentState.isFinal()) {
+            return true;
+        }
+        
+        for(Transition t : possibilities) {
+            Transition t1 = possibilities.pop();
+            w = doTransition(t, w);
+            if(w.isEmpty() || currentState.isFinal()) {
+                return true;
+            }
+            
+            else {
+                
+                if(!visited.contains(t)) {
+                    visited.add(t);
+                findPath(w);
+            }
+            }
+        }
+        
+        return false;
     }
     
     public static ArrayList<State> getInicials() {
@@ -179,7 +131,7 @@ public class Verificador {
         return inicials;
     }
     
-    public static ArrayList<Transition> getLambda(State s) {
+    public static ArrayList<Transition> getLambdaTransitions(State s, ArrayList<Transition> T) {
         ArrayList<Transition> lambdaTransitions = new ArrayList<Transition>();
         
         for(Transition t : T) {
@@ -192,12 +144,15 @@ public class Verificador {
     }
     
     public static Letter getNextLetter(String word) {
-        Letter l = new Letter(word.charAt(0));
+        if(!word.isEmpty()) {
+            Letter l = new Letter(word.charAt(0));
         
         return l;
+        }
+        return null;
     }
     
-    public static ArrayList<Transition> getTransitions(State s, Letter l) {
+    public static ArrayList<Transition> getTransitions(State s, Letter l, ArrayList<Transition> T) {
         ArrayList<Transition> transitions = new ArrayList<Transition>();
         
         for(Transition t : T) {
@@ -209,9 +164,11 @@ public class Verificador {
         return transitions;
     }
     
-    public static State doTransition(Transition t) {
-        forward(word);
-        return t.to();
+    public static String doTransition(Transition t, String w) {
+        if(t.letter().getSymbol()!='#')
+            w = forward(w);
+        currentState = t.to();
+        return w;
     }
     
     public static String forward(String s) {

@@ -13,8 +13,8 @@ import static verificador.Verificador.S;
  */
 public class State {
     private String name;
-    private Boolean i;
-    private Boolean f;
+    private boolean i;
+    private boolean f; 
     
     public State(String name) {
         this.name = name;
