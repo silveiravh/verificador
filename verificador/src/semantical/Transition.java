@@ -21,6 +21,18 @@ public class Transition {
         this.letter = letter;
         this.to = to;
     }
+
+    public State from() {
+        return from;
+    }
+
+    public Letter letter() {
+        return letter;
+    }
+
+    public State to() {
+        return to;
+    }
     
     public static void printTransitions() {
         System.out.println("Transições");

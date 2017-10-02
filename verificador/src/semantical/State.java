@@ -26,6 +26,10 @@ public class State {
         return name;
     }
     
+    public boolean getInicial() {
+        return i;
+    }
+    
     public static void setInicial(State state) {
         for(State s : S) {
             if(s.name.equals(state.name)) {
