@@ -5,7 +5,7 @@
  */
 package semantical;
 
-import static syntatical.Verificador.S;
+import static verificador.Verificador.S;
 
 /**
  *
@@ -47,11 +47,12 @@ public class State {
         for(State s : S) {
             System.out.print("Nome: "+s.name);
             if(s.i) {
-                System.out.println(" inicial");
+                System.out.print(" inicial");
             }
             else if(s.f) {
-                System.out.println(" final");
+                System.out.print(" final");
             }
+            System.out.println("");
         }
         System.out.println("");
     }

@@ -3,7 +3,7 @@
  * To change this template file, choose Tools | Templates
  * and open the template in the editor.
  */
-package syntatical;
+package verificador;
 
 import java.io.IOException;
 import java.util.ArrayList;
@@ -12,6 +12,8 @@ import static semantical.Letter.printLetters;
 import semantical.State;
 import static semantical.State.printStates;
 import semantical.Transition;
+import lexical.LexicalAnalysis;
+import syntatical.SyntaticalAnalysis;
 import static semantical.Transition.printTransitions;
 
 /**
@@ -32,7 +34,7 @@ public class Verificador {
         
         
         if (args.length != 1) {
-            System.out.println("Usage: java mlambda [MiniLambda File]");
+            System.out.println("Usage: java verificador [concat.al]");
             return;
         }
 
@@ -47,11 +49,4 @@ public class Verificador {
             System.err.println(e.getMessage());
         }
     }
-
-    private static boolean checkType(TokenType type) {
-        return !(type == TokenType.END_OF_FILE ||
-                 type == TokenType.INVALID_TOKEN ||
-                 type == TokenType.UNEXPECTED_EOF);
-    }
-    
 }

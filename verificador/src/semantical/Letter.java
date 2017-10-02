@@ -5,7 +5,7 @@
  */
 package semantical;
 
-import static syntatical.Verificador.L;
+import static verificador.Verificador.L;
 
 /**
  *

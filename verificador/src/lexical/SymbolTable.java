@@ -3,8 +3,9 @@
  * To change this template file, choose Tools | Templates
  * and open the template in the editor.
  */
-package syntatical;
+package lexical;
 
+import lexical.TokenType;
 import java.util.Map;
 import java.util.HashMap;
 

@@ -3,8 +3,11 @@
  * To change this template file, choose Tools | Templates
  * and open the template in the editor.
  */
-package syntatical;
+package lexical;
 
+import lexical.SymbolTable;
+import lexical.TokenType;
+import lexical.Lexeme;
 import java.io.FileInputStream;
 import java.io.IOException;
 import java.io.PushbackInputStream;
@@ -14,7 +17,7 @@ import java.io.PushbackInputStream;
  * @author silveira
  */
 public class LexicalAnalysis {
-    protected static int line;
+    public static int line;
     private PushbackInputStream input;
     private SymbolTable st = new SymbolTable();
     
@@ -35,10 +38,10 @@ public class LexicalAnalysis {
             c = input.read();
             switch(e){
                 case 1: if(c==-1) {
-                            l.type = TokenType.UNEXPECTED_EOF;
+                            l.type = TokenType.END_OF_FILE;
                             e = 4;
                         }
-                        if(c==' ' || c=='\t') {
+                        else if(c==' ' || c=='\t') {
                             e = 1;
                         }
                         else if(c=='\n') {
@@ -84,11 +87,7 @@ public class LexicalAnalysis {
                         }
                         else if(c=='\"') {
                             e = 4;
-                        }
-                        else {
-                            l.type = TokenType.INVALID_TOKEN;
-                        }
-                            
+                        } 
             }
         }
         if(e==4) {
@@ -106,7 +105,6 @@ public class LexicalAnalysis {
             }
             else{
                 l.type = TokenType.STATE;
-                System.out.println("Estado: "+l.token);
             }
         }
         return l;

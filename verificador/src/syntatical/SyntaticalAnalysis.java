@@ -5,6 +5,9 @@
  */
 package syntatical;
 
+import lexical.LexicalAnalysis;
+import lexical.TokenType;
+import lexical.Lexeme;
 import semantical.Letter;
 import semantical.Transition;
 import semantical.State;
@@ -14,12 +17,12 @@ import java.util.HashMap;
 import java.util.Map;
 import static semantical.State.setFinal;
 import static semantical.State.setInicial;
-import static syntatical.LexicalAnalysis.line;
-import static syntatical.Verificador.S;
-import static syntatical.Verificador.L;
-import static syntatical.Verificador.T;
-import static syntatical.Verificador.I;
-import static syntatical.Verificador.F;
+import static lexical.LexicalAnalysis.line;
+import static verificador.Verificador.S;
+import static verificador.Verificador.L;
+import static verificador.Verificador.T;
+import static verificador.Verificador.I;
+import static verificador.Verificador.F;
 
 /**
  *
@@ -40,7 +43,7 @@ public class SyntaticalAnalysis {
                 current = lex.nextToken();
             }
             else {
-                throw new IOException(line+": Lexama não esperado ["+current.token+"]"+current.type+"esperado: "+type);
+                throw new IOException(line+": Lexama não esperado ["+current.token+"]");
             }
         } catch(IOException e) {
             System.out.println(e.getMessage());
@@ -51,16 +54,12 @@ public class SyntaticalAnalysis {
     // <af> ::= '{' "af" ':' '[' <states> ',' <letters> ',' <transitions> ',' <inicials> ',' <finals> ']' '}' 
     public void procAf() throws IOException {
         matchToken(TokenType.CBRA_OPEN);
-        System.out.println("af: "+current.token);
         matchToken(TokenType.AF);
         matchToken(TokenType.COLON);
         matchToken(TokenType.SBRA_OPEN);
-        System.out.println("state: "+current.token);
         S = procStates();
         matchToken(TokenType.COMMA);
-        System.out.println("Before letters:"+current.token);
         L = procLetters();
-        System.out.println("Before transition: "+current.token);
         matchToken(TokenType.COMMA);
         T = procTransitions();
         matchToken(TokenType.COMMA);
@@ -142,11 +141,9 @@ public class SyntaticalAnalysis {
     //<transitions> ::= '[' <state> ',' <letter> ',' <state> ']' {, '[' <state> ',' <letter> ',' <state> ']'}
     private ArrayList<Transition> procTransitions() throws IOException {
         try {
-            System.out.println("Current: "+current.token);
             matchToken(TokenType.SBRA_OPEN);
             matchToken(TokenType.SBRA_OPEN);
             State from = procState();
-            System.out.println(from);
             matchToken(TokenType.COMMA);
             Letter letter = procLetter();
             matchToken(TokenType.COMMA);
