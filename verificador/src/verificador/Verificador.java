@@ -32,6 +32,7 @@ public class Verificador {
     
    
     public static ArrayList<Transition> visited = new ArrayList<Transition>();
+    public static Stack<Transition> possibilities = new Stack<Transition>();
     
     /**
      * @param args the command line arguments
@@ -58,37 +59,11 @@ public class Verificador {
         Scanner input = new Scanner(System.in);
         
         
-        /*
         while(true) {
             String word = input.nextLine();
             recognize(word);
         }
-        */
         
-        
-        
-        //Debug
-        ArrayList<State> inicials = getInicials();
-        System.out.println("");
-        printStates(inicials);
-        Letter l = new Letter('0');
-        ArrayList<Transition> lt = getTransitions(S.get(1), l, T);
-        System.out.println("");
-        printTransitions(lt);
-        System.out.println("");
-        String word = "01111";
-        State state = S.get(0);
-        state.setWord(word);
-        Transition t1 = new Transition (lt.get(0));
-        t1.from().setWord("45");
-        System.out.println("t1: "); t1.printTransition();
-        System.out.println("t1: "); t1.printTransition();
-        if(t1.from().getWord().equals("45"))
-         visited.add(t1);
-        System.out.println("apos adicionar: "); visited.get(0).printTransition();
-        
-        //Transition t2 = new Transition(lt.get(0));
-        //t2.printTransition();
     }
     
     public static void recognize(String word) {
@@ -107,8 +82,9 @@ public class Verificador {
     }
     
     public static boolean findPath(State s){
+        System.out.println(s.getName());
         System.out.println(s.getWord());
-         Stack<Transition> possibilities = new Stack<Transition>();
+        
         
         ArrayList<Transition> lambdaTransitions = new ArrayList<Transition>();
         ArrayList<Transition> letterTransitions = new ArrayList<Transition>();
@@ -122,6 +98,7 @@ public class Verificador {
             }
                 
         }
+        
         Letter l = getNextLetter(s.getWord());
         if(l!=null) {
             letterTransitions = getTransitions(s, l , T);
@@ -132,21 +109,35 @@ public class Verificador {
             if(!isVisited(t)) {  
                 possibilities.push(t);
             }
-                
         }
+        
+        /*
+        System.out.println("State: "+s.getName());
+        for(Transition t : possibilities) {
+            t.printTransition();
+        }
+        */
         
         while(!possibilities.empty()) {
-            Transition t = possibilities.pop();
-            visited.add(t);
-            doTransition(t, s);
+            Transition t1 = possibilities.pop();
+            visited.add(t1);
+            doTransition(t1, s);
             if(s.getWord().isEmpty() && s.isFinal()) {
+                System.out.println("sim");
                 return true;
             }
+            else if(s.getWord().isEmpty() && !s.isFinal()) {
+                undoTransition(t1, s);
+            }
             else {
-                return findPath(s);
+                findPath(s);
             }
         }
+            
         
+        for(Transition t : possibilities) {
+            t.printTransition();
+        }
         return false;
     }
     
@@ -201,8 +192,18 @@ public class Verificador {
         s.setName(t.to().getName());
     }
     
+    public static void undoTransition(Transition t, State s) {
+        if(t.letter().getSymbol()!='#')
+            s.setWord(backward(s.getWord(), t.letter()));
+        s.setName(t.from().getName());
+    }
+    
     public static String forward(String s) {
         s = s.substring(1, s.length());
         return s;
+    }
+    
+    public static String backward(String s, Letter l) {
+        return (s + l.getSymbol());
     }
 }

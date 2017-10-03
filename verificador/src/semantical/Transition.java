@@ -25,14 +25,6 @@ public class Transition {
         this.from.setWord("");
         this.to.setWord("");
     }
-    
-    public Transition(Transition t) {
-        this.from.setName(t.from().getName());
-        this.letter.setSymbol(t.letter().getSymbol());
-        this.to.setName(t.to().getName());
-        this.from.setWord(t.from().getWord());
-        this.to.setWord(t.to().getWord());
-    }
 
     public State from() {
         return from;
