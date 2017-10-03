@@ -14,7 +14,6 @@ import java.util.HashMap;
  * @author silveira
  */
 public class SymbolTable {
-
     private final Map<String, TokenType> st;
 
     public SymbolTable() {

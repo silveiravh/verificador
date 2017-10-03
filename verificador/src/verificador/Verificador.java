@@ -78,6 +78,7 @@ public class Verificador {
     }
     
     public static boolean findPath(State s){
+        System.out.println(s.getWord());
         ArrayList<Transition> lambdaTransitions = getLambdaTransitions(s, T);
         for(Transition t : lambdaTransitions) {
             t.from().setWord(s.getWord());
