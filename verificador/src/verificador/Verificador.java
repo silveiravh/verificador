@@ -30,7 +30,7 @@ public class Verificador {
     public static ArrayList<State> I = new ArrayList<State>();
     public static ArrayList<State> F = new ArrayList<State>();
     
-    public static Stack<Transition> possibilities = new Stack<Transition>();
+   
     public static ArrayList<Transition> visited = new ArrayList<Transition>();
     
     /**
@@ -46,9 +46,9 @@ public class Verificador {
             LexicalAnalysis l = new LexicalAnalysis(args[0]);
             SyntaticalAnalysis s = new SyntaticalAnalysis(l);
             s.procAf();
-            printStates();
-            printLetters();
-            printTransitions();
+            printStates(S);
+            printLetters(L);
+            printTransitions(T);
         } catch (Exception e) {
             System.err.println(e.getMessage());
         }
@@ -57,10 +57,38 @@ public class Verificador {
         
         Scanner input = new Scanner(System.in);
         
+        
+        /*
         while(true) {
             String word = input.nextLine();
             recognize(word);
         }
+        */
+        
+        
+        
+        //Debug
+        ArrayList<State> inicials = getInicials();
+        System.out.println("");
+        printStates(inicials);
+        Letter l = new Letter('0');
+        ArrayList<Transition> lt = getTransitions(S.get(1), l, T);
+        System.out.println("");
+        printTransitions(lt);
+        System.out.println("");
+        String word = "01111";
+        State state = S.get(0);
+        state.setWord(word);
+        Transition t1 = new Transition (lt.get(0));
+        t1.from().setWord("45");
+        System.out.println("t1: "); t1.printTransition();
+        System.out.println("t1: "); t1.printTransition();
+        if(t1.from().getWord().equals("45"))
+         visited.add(t1);
+        System.out.println("apos adicionar: "); visited.get(0).printTransition();
+        
+        //Transition t2 = new Transition(lt.get(0));
+        //t2.printTransition();
     }
     
     public static void recognize(String word) {
@@ -75,11 +103,17 @@ public class Verificador {
                 System.out.println("Não");
             }
         }
+        System.out.println("");
     }
     
     public static boolean findPath(State s){
         System.out.println(s.getWord());
-        ArrayList<Transition> lambdaTransitions = getLambdaTransitions(s, T);
+         Stack<Transition> possibilities = new Stack<Transition>();
+        
+        ArrayList<Transition> lambdaTransitions = new ArrayList<Transition>();
+        ArrayList<Transition> letterTransitions = new ArrayList<Transition>();
+        
+        lambdaTransitions = getLambdaTransitions(s, T);
         for(Transition t : lambdaTransitions) {
             t.from().setWord(s.getWord());
             t.to().setWord(s.getWord());
@@ -88,7 +122,10 @@ public class Verificador {
             }
                 
         }
-        ArrayList<Transition> letterTransitions = getTransitions(s, getNextLetter(s.getWord()), T);
+        Letter l = getNextLetter(s.getWord());
+        if(l!=null) {
+            letterTransitions = getTransitions(s, l , T);
+        }
         for(Transition t : letterTransitions) {
             t.from().setWord(s.getWord());
             t.to().setWord(forward(s.getWord()));
@@ -96,10 +133,6 @@ public class Verificador {
                 possibilities.push(t);
             }
                 
-        }
-        
-        if(lambdaTransitions.size()+letterTransitions.size()==0) {
-            return false;
         }
         
         while(!possibilities.empty()) {
@@ -165,7 +198,7 @@ public class Verificador {
     public static void doTransition(Transition t, State s) {
         if(t.letter().getSymbol()!='#')
             s.setWord(forward(s.getWord()));
-        s = t.to();
+        s.setName(t.to().getName());
     }
     
     public static String forward(String s) {

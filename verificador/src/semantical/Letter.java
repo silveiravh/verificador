@@ -5,6 +5,7 @@
  */
 package semantical;
 
+import java.util.ArrayList;
 import static verificador.Verificador.L;
 
 /**
@@ -21,8 +22,12 @@ public class Letter {
     public char getSymbol() {
         return symbol;
     }
+
+    public void setSymbol(char symbol) {
+        this.symbol = symbol;
+    }
     
-    public static void printLetters() {
+    public static void printLetters(ArrayList<Letter> L) {
         System.out.println("Letras: ");
         for(Letter l : L) {
             System.out.println("Symbol: "+l.symbol);

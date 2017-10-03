@@ -5,6 +5,7 @@
  */
 package semantical;
 
+import java.util.ArrayList;
 import static verificador.Verificador.T;
 import static verificador.Verificador.visited;
 
@@ -21,6 +22,16 @@ public class Transition {
         this.from = from;
         this.letter = letter;
         this.to = to;
+        this.from.setWord("");
+        this.to.setWord("");
+    }
+    
+    public Transition(Transition t) {
+        this.from.setName(t.from().getName());
+        this.letter.setSymbol(t.letter().getSymbol());
+        this.to.setName(t.to().getName());
+        this.from.setWord(t.from().getWord());
+        this.to.setWord(t.to().getWord());
     }
 
     public State from() {
@@ -42,15 +53,19 @@ public class Transition {
                t.to.getName().equals(transition.to.getName()) &&
                t.from.getWord().equals(transition.from.getWord()) &&
                t.to.getWord().equals(transition.to.getWord()))
-                return true;
+               return true;
         }
         return false;
     }
     
-    public static void printTransitions() {
+    public static void printTransitions(ArrayList<Transition> T) {
         System.out.println("Transições");
         for(Transition t : T) {
             System.out.println("from: "+t.from.getName()+" to "+t.to.getName()+" consuming "+t.letter.getSymbol());
         }
+    }
+    
+    public void printTransition() {
+            System.out.println("from: "+"("+this.from().getName()+", "+from().getWord()+")"+" to "+"("+this.to.getName()+", "+this.to().getWord()+")"+" consuming "+this.letter.getSymbol());
     }
 }

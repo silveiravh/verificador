@@ -5,6 +5,7 @@
  */
 package semantical;
 
+import java.util.ArrayList;
 import static verificador.Verificador.S;
 
 /**
@@ -26,6 +27,10 @@ public class State {
 
     public String getName() {
         return name;
+    }
+    
+    public void setName(String name) {
+        this.name = name;
     }
     
     public boolean isInicial() {
@@ -60,7 +65,7 @@ public class State {
         this.word = word;
     }
     
-    public static void printStates() {
+    public static void printStates(ArrayList<State> S) {
         System.out.println("Estados:");
         for(State s : S) {
             System.out.print("Nome: "+s.name);
