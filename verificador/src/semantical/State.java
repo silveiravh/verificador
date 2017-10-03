@@ -14,12 +14,14 @@ import static verificador.Verificador.S;
 public class State {
     private String name;
     private boolean i;
-    private boolean f; 
+    private boolean f;
+    String word;
     
     public State(String name) {
         this.name = name;
         this.i = false;
         this.f = false;
+        this.word = word;
     }
 
     public String getName() {
@@ -48,6 +50,14 @@ public class State {
                 s.f = true;
             }
         }
+    }
+
+    public String getWord() {
+        return word;
+    }
+
+    public void setWord(String word) {
+        this.word = word;
     }
     
     public static void printStates() {

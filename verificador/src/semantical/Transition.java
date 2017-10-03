@@ -6,6 +6,7 @@
 package semantical;
 
 import static verificador.Verificador.T;
+import static verificador.Verificador.visited;
 
 /**
  *
@@ -35,10 +36,12 @@ public class Transition {
     }
     
     public static boolean isVisited(Transition transition) {
-        for (Transition t : T) {
-            if(t.from.getName().equals(transition.from().getName()) && t.letter.getSymbol()==transition.letter.getSymbol() && t.to.getName().equals(transition.to.getName())) {
+        for(Transition t : visited) {
+            if(t.from.getName().equals(transition.from.getName()) &&
+               t.letter.getSymbol()==transition.letter.getSymbol() &&
+               t.to.getName().equals(transition.to.getName()) &&
+               t.from.getWord().equals(transition.from.getWord()))
                 return true;
-            }
         }
         return false;
     }
