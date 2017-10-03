@@ -59,7 +59,7 @@ public class Verificador {
         
         while(true) {
             String word = input.nextLine();
-            //recognize(word);
+            recognize(word);
         }
     }
     
@@ -81,6 +81,7 @@ public class Verificador {
         ArrayList<Transition> lambdaTransitions = getLambdaTransitions(s, T);
         for(Transition t : lambdaTransitions) {
             t.from().setWord(s.getWord());
+            t.to().setWord(s.getWord());
             if(!isVisited(t)) {        
                 possibilities.push(t);
             }
@@ -89,20 +90,29 @@ public class Verificador {
         ArrayList<Transition> letterTransitions = getTransitions(s, getNextLetter(s.getWord()), T);
         for(Transition t : letterTransitions) {
             t.from().setWord(s.getWord());
+            t.to().setWord(forward(s.getWord()));
             if(!isVisited(t)) {  
                 possibilities.push(t);
             }
                 
         }
-        if(s.getWord().isEmpty() && s.isFinal()) {
-            return true;
+        
+        if(lambdaTransitions.size()+letterTransitions.size()==0) {
+            return false;
         }
-        else {
+        
+        while(!possibilities.empty()) {
             Transition t = possibilities.pop();
             visited.add(t);
             doTransition(t, s);
-            findPath(s);
+            if(s.getWord().isEmpty() && s.isFinal()) {
+                return true;
+            }
+            else {
+                return findPath(s);
+            }
         }
+        
         return false;
     }
     
@@ -159,11 +169,6 @@ public class Verificador {
     
     public static String forward(String s) {
         s = s.substring(1, s.length());
-        return s;
-    }
-    
-    public static String backward(String s, Letter l) {
-        s = l.getSymbol() + s;
         return s;
     }
 }

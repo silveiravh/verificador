@@ -40,7 +40,8 @@ public class Transition {
             if(t.from.getName().equals(transition.from.getName()) &&
                t.letter.getSymbol()==transition.letter.getSymbol() &&
                t.to.getName().equals(transition.to.getName()) &&
-               t.from.getWord().equals(transition.from.getWord()))
+               t.from.getWord().equals(transition.from.getWord()) &&
+               t.to.getWord().equals(transition.to.getWord()))
                 return true;
         }
         return false;
