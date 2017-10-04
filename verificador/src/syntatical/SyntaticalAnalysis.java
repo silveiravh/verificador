@@ -18,6 +18,8 @@ import java.util.Map;
 import static semantical.State.setFinal;
 import static semantical.State.setInicial;
 import static lexical.LexicalAnalysis.line;
+import static semantical.State.isFinal;
+import static semantical.State.isInicial;
 import static verificador.Verificador.S;
 import static verificador.Verificador.L;
 import static verificador.Verificador.T;
@@ -94,7 +96,8 @@ public class SyntaticalAnalysis {
     private State procState() throws IOException {
         try {
             if(this.current.type==TokenType.STATE) {
-                State s = new State(current.token);
+                System.out.println(current.token+" "+isInicial(current.token)+" "+isFinal(current.token));
+                State s = new State(current.token, isInicial(current.token), isFinal(current.token));
                 matchToken(TokenType.STATE);
                 return s;
             }

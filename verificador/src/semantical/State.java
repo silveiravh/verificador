@@ -19,10 +19,10 @@ public class State {
     private boolean f;
     String word;
     
-    public State(String name) {
+    public State(String name, boolean i, boolean f) {
         this.name = name;
-        this.i = false;
-        this.f = false;
+        this.i = i;
+        this.f = f;
         this.word = "";
     }
     
@@ -30,15 +30,34 @@ public class State {
         this.name = name;
         this.word = word;
         this.i = i;
-        this.i = f;
+        this.f = f;
     }
 
+    public void setI(boolean i) {
+        this.i = i;
+    }
+
+    public void setF(boolean f) {
+        this.f = f;
+    }
+
+    
+    
     public String getName() {
         return name;
     }
     
     public void setName(String name) {
         this.name = name;
+    }
+    
+    public static boolean isInicial(String stateName) {
+        for(State s : S) {
+            if(s.getName().equals(stateName)) {
+                return s.isI();
+            }
+        }
+        return false;
     }
     
     public boolean isInicial() {
@@ -57,6 +76,15 @@ public class State {
         return this.f;
     }
     
+    public static boolean isFinal(String stateName) {
+        for(State s : S) {
+            if(s.getName().equals(stateName)) {
+                return s.isFinal();
+            }
+        }
+        return false;
+    }
+    
     public static void setFinal(State state) {
         for(State s : S) {
             if(s.name.equals(state.name)) {
@@ -70,14 +98,8 @@ public class State {
     }
 
     public boolean isI() {
-        return i;
+        return this.i;
     }
-
-    public boolean isF() {
-        return f;
-    }
-
-    
     
     public void setWord(String word) {
         this.word = word;
@@ -90,6 +112,13 @@ public class State {
                 return true;
         }
         return false;
+    }
+    
+    public int getFinal() {
+        if(this.f)
+            return 1;
+        else
+            return 0;
     }
     
     public static void printStates(ArrayList<State> S) {
