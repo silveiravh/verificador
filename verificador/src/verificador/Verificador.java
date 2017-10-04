@@ -30,7 +30,7 @@ public class Verificador {
     public static ArrayList<State> I = new ArrayList<State>();
     public static ArrayList<State> F = new ArrayList<State>();
     
-   
+    public static Stack<State> possibilities = new Stack<State>();
     public static ArrayList<State> visited = new ArrayList<State>();
     
     public static boolean hasPath;
@@ -116,7 +116,7 @@ public class Verificador {
     public static void findPath(State s){
         State currentState = new State(s.getName(), s.getWord(), s.isI(), s.isF()); 
         System.out.println("Current state: "+currentState.getName()+" "+currentState.getWord());
-        Stack<State> possibilities = new Stack<State>();
+        
         
         ArrayList<Transition> lambdaTransitions = new ArrayList<Transition>();
         ArrayList<Transition> letterTransitions = new ArrayList<Transition>();
@@ -131,8 +131,9 @@ public class Verificador {
         }
         
         
-        
         Letter l = getNextLetter(currentState.getWord());
+        if(l!=null)
+            System.out.println("Letter: "+l.getSymbol());
         if(l!=null) {
             letterTransitions = getTransitions(currentState, l , T);
         }
@@ -161,9 +162,8 @@ public class Verificador {
             else {
                 findPath(currentState);
             }
+            return;
         }
-        
-        return;
     }
     
     public static ArrayList<State> getInicials() {
