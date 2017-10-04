@@ -23,7 +23,14 @@ public class State {
         this.name = name;
         this.i = false;
         this.f = false;
+        this.word = "";
+    }
+    
+    public State(String name, String word, Boolean i, Boolean f) {
+        this.name = name;
         this.word = word;
+        this.i = i;
+        this.i = f;
     }
 
     public String getName() {
@@ -62,6 +69,16 @@ public class State {
         return word;
     }
 
+    public boolean isI() {
+        return i;
+    }
+
+    public boolean isF() {
+        return f;
+    }
+
+    
+    
     public void setWord(String word) {
         this.word = word;
     }

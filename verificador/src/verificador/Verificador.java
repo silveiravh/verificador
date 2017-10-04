@@ -62,12 +62,39 @@ public class Verificador {
         
         
         
+        
         while(true) {
             String word = input.nextLine();
             hasPath = false;
             recognize(word);
         }
         
+        /*
+        Debug mode
+        String word = "0000111";
+        Letter l = new Letter('0');
+        State s = S.get(0);
+        s.setWord(word);
+        ArrayList<State> possibilities = new ArrayList<State>();
+        ArrayList<Transition> lambdaTransitions = getLambdaTransitions(s, T);
+        for(Transition t : lambdaTransitions) {
+            doTransition(t, s);
+            possibilities.add(new State(s.getName(), s.getWord(), s.isI(), s.isF()));
+            undoTransition(t, s);
+        }
+        ArrayList<Transition> letterTransitions = getTransitions(s, l, T);
+        for(Transition t : letterTransitions) {
+            doTransition(t, s);
+            System.out.println("word after transitions: "+s.getWord());
+            possibilities.add(new State(s.getName(), s.getWord(), s.isI(), s.isF()));
+            undoTransition(t, s);
+        }
+        
+        System.out.println("Possibilities");
+        for (State s1 : possibilities) {
+            System.out.println(s1.getName()+" "+s1.getWord());
+        }
+        */
     }
     
     public static void recognize(String word) {
@@ -87,54 +114,52 @@ public class Verificador {
     }
     
     public static void findPath(State s){
-        System.out.println(s.getName());
-        System.out.println(s.getWord());
+        State currentState = new State(s.getName(), s.getWord(), s.isI(), s.isF()); 
+        System.out.println("Current state: "+currentState.getName()+" "+currentState.getWord());
         Stack<State> possibilities = new Stack<State>();
         
         ArrayList<Transition> lambdaTransitions = new ArrayList<Transition>();
         ArrayList<Transition> letterTransitions = new ArrayList<Transition>();
         
-        lambdaTransitions = getLambdaTransitions(s, T);
+        lambdaTransitions = getLambdaTransitions(currentState, T);
         for(Transition t : lambdaTransitions) {
-            doTransition(t, s);
-            if(!isVisited(s)) {        
-                possibilities.push(s);
+            doTransition(t, currentState);
+            if(!isVisited(currentState)) {        
+                possibilities.push(new State(currentState.getName(), currentState.getWord(), currentState.isI(), currentState.isF()));
             }
-            undoTransition(t, s);
+            undoTransition(t, currentState);
         }
         
-        System.out.println("Possibilidades");
-        for(State t : possibilities) {
-            System.out.println(s.getName());
-            System.out.println(s.getWord());
-        }
         
-        Letter l = getNextLetter(s.getWord());
+        
+        Letter l = getNextLetter(currentState.getWord());
         if(l!=null) {
-            letterTransitions = getTransitions(s, l , T);
+            letterTransitions = getTransitions(currentState, l , T);
         }
         for(Transition t : letterTransitions) {
-            doTransition(t, s);
-            if(!isVisited(s)) {  
-                possibilities.push(s);
+            doTransition(t, currentState);
+            if(!isVisited(currentState)) {  
+                possibilities.push(new State(currentState.getName(), currentState.getWord(), currentState.isI(), currentState.isF()));
             }
-            undoTransition(t, s);
+            undoTransition(t, currentState);
         }
         
-        /*
-        System.out.println("State: "+s.getName());
-        for(Transition t : possibilities) {
-            t.printTransition();
+        System.out.println("Possibilities");
+        for(State s1 : possibilities) {
+            System.out.println(s1.getName()+" "+s1.getWord());
         }
-        */
+        
+        
         
         while(!possibilities.empty() && !hasPath) {
-            s = possibilities.pop();
-            System.out.println(s.getWord());
-            visited.add(s);
-            if(s.getWord().isEmpty() && s.isFinal()) {
+            currentState = possibilities.pop();
+            visited.add(currentState);
+            if(currentState.getWord().isEmpty() && currentState.isFinal()) {
                 hasPath = true;
                 return;
+            }
+            else {
+                findPath(currentState);
             }
         }
         
