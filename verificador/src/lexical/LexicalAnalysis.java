@@ -41,7 +41,7 @@ public class LexicalAnalysis {
                             l.type = TokenType.END_OF_FILE;
                             e = 4;
                         }
-                        else if(c==' ' || c=='\t') {
+                        else if(c==' ' || c=='\t' || c=='\r') {
                             e = 1;
                         }
                         else if(c=='\n') {
