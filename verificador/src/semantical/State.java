@@ -7,6 +7,7 @@ package semantical;
 
 import java.util.ArrayList;
 import static verificador.Verificador.S;
+import static verificador.Verificador.visited;
 
 /**
  *
@@ -63,6 +64,15 @@ public class State {
 
     public void setWord(String word) {
         this.word = word;
+    }
+    
+    public static boolean isVisited(State state) {
+        for(State s : visited) {
+            if(s.getName().equals(state.getName()) &&
+               s.getWord().equals(state.getWord()))
+                return true;
+        }
+        return false;
     }
     
     public static void printStates(ArrayList<State> S) {

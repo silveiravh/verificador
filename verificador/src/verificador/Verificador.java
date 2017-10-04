@@ -12,10 +12,10 @@ import java.util.Stack;
 import semantical.Letter;
 import static semantical.Letter.printLetters;
 import semantical.State;
+import static semantical.State.isVisited;
 import static semantical.State.printStates;
 import semantical.Transition;
 import lexical.LexicalAnalysis;
-import static semantical.Transition.isVisited;
 import syntatical.SyntaticalAnalysis;
 import static semantical.Transition.printTransitions;
 
@@ -31,8 +31,9 @@ public class Verificador {
     public static ArrayList<State> F = new ArrayList<State>();
     
    
-    public static ArrayList<Transition> visited = new ArrayList<Transition>();
-    public static Stack<Transition> possibilities = new Stack<Transition>();
+    public static ArrayList<State> visited = new ArrayList<State>();
+    
+    public static boolean hasPath;
     
     /**
      * @param args the command line arguments
@@ -59,8 +60,11 @@ public class Verificador {
         Scanner input = new Scanner(System.in);
         
         
+        
+        
         while(true) {
             String word = input.nextLine();
+            hasPath = false;
             recognize(word);
         }
         
@@ -71,32 +75,38 @@ public class Verificador {
         
         for(State i : inicials) {
             i.setWord(word);
-            if(findPath(i)) {
+            findPath(i);
+            if(hasPath) {
                 System.out.println("Sim");
-            }
-            else {
-                System.out.println("Não");
+                return;
             }
         }
-        System.out.println("");
+        
+        System.out.println("Não");
+        return;
     }
     
-    public static boolean findPath(State s){
+    public static void findPath(State s){
         System.out.println(s.getName());
         System.out.println(s.getWord());
-        
+        Stack<State> possibilities = new Stack<State>();
         
         ArrayList<Transition> lambdaTransitions = new ArrayList<Transition>();
         ArrayList<Transition> letterTransitions = new ArrayList<Transition>();
         
         lambdaTransitions = getLambdaTransitions(s, T);
         for(Transition t : lambdaTransitions) {
-            t.from().setWord(s.getWord());
-            t.to().setWord(s.getWord());
-            if(!isVisited(t)) {        
-                possibilities.push(t);
+            doTransition(t, s);
+            if(!isVisited(s)) {        
+                possibilities.push(s);
             }
-                
+            undoTransition(t, s);
+        }
+        
+        System.out.println("Possibilidades");
+        for(State t : possibilities) {
+            System.out.println(s.getName());
+            System.out.println(s.getWord());
         }
         
         Letter l = getNextLetter(s.getWord());
@@ -104,11 +114,11 @@ public class Verificador {
             letterTransitions = getTransitions(s, l , T);
         }
         for(Transition t : letterTransitions) {
-            t.from().setWord(s.getWord());
-            t.to().setWord(forward(s.getWord()));
-            if(!isVisited(t)) {  
-                possibilities.push(t);
+            doTransition(t, s);
+            if(!isVisited(s)) {  
+                possibilities.push(s);
             }
+            undoTransition(t, s);
         }
         
         /*
@@ -118,27 +128,17 @@ public class Verificador {
         }
         */
         
-        while(!possibilities.empty()) {
-            Transition t1 = possibilities.pop();
-            visited.add(t1);
-            doTransition(t1, s);
+        while(!possibilities.empty() && !hasPath) {
+            s = possibilities.pop();
+            System.out.println(s.getWord());
+            visited.add(s);
             if(s.getWord().isEmpty() && s.isFinal()) {
-                System.out.println("sim");
-                return true;
-            }
-            else if(s.getWord().isEmpty() && !s.isFinal()) {
-                undoTransition(t1, s);
-            }
-            else {
-                findPath(s);
+                hasPath = true;
+                return;
             }
         }
-            
         
-        for(Transition t : possibilities) {
-            t.printTransition();
-        }
-        return false;
+        return;
     }
     
     public static ArrayList<State> getInicials() {
@@ -204,6 +204,6 @@ public class Verificador {
     }
     
     public static String backward(String s, Letter l) {
-        return (s + l.getSymbol());
+        return (l.getSymbol() + s);
     }
 }

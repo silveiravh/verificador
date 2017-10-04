@@ -22,8 +22,6 @@ public class Transition {
         this.from = from;
         this.letter = letter;
         this.to = to;
-        this.from.setWord("");
-        this.to.setWord("");
     }
 
     public State from() {
@@ -36,18 +34,6 @@ public class Transition {
 
     public State to() {
         return to;
-    }
-    
-    public static boolean isVisited(Transition transition) {
-        for(Transition t : visited) {
-            if(t.from.getName().equals(transition.from.getName()) &&
-               t.letter.getSymbol()==transition.letter.getSymbol() &&
-               t.to.getName().equals(transition.to.getName()) &&
-               t.from.getWord().equals(transition.from.getWord()) &&
-               t.to.getWord().equals(transition.to.getWord()))
-               return true;
-        }
-        return false;
     }
     
     public static void printTransitions(ArrayList<Transition> T) {
