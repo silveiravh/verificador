@@ -32,7 +32,7 @@ public class Verificador {
     public static ArrayList<State> I = new ArrayList<State>();
     public static ArrayList<State> F = new ArrayList<State>();
     
-    public static ArrayList<State> visited = new ArrayList<State>();
+    public static ArrayList<State> visited;
     
     public static boolean hasPath;
     
@@ -79,6 +79,7 @@ public class Verificador {
         
         while(true) {
             String word = input.nextLine();
+            visited = new ArrayList<State>();
             hasPath = false;
             recognize(word);
         }
