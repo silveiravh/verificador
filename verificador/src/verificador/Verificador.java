@@ -135,9 +135,8 @@ public class Verificador {
     }
     
     public static void findPath(State s){
-        System.out.println(s.getName()+" "+s.getWord()+" "+s.isI()+" "+s.isFinal());
         State currentState = new State(s.getName(), s.getWord(), s.isI(), s.isFinal()); 
-        
+        System.out.println("Current state: "+currentState.getName()+" "+currentState.getWord());
         
         Stack<State> possibilities = new Stack<State>();
         
@@ -175,14 +174,15 @@ public class Verificador {
         
         while(!possibilities.empty() && !hasPath) {
             currentState = possibilities.pop();
+            /*
             System.out.println(currentState.getFinal());
-            System.out.println("Current state: "+currentState.getName()+" "+currentState.getWord());
             if(currentState.getWord().isEmpty()) {
                 System.out.println("vazio");
             }
             if(currentState.isFinal()) {
                 System.out.println("final");
             }
+            */
             visited.add(currentState);
             if(currentState.getWord().isEmpty() && currentState.isFinal()) {
                 hasPath = true;
