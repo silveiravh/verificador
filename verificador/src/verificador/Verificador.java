@@ -5,9 +5,10 @@
  */
 package verificador;
 
+import java.io.BufferedReader;
 import java.io.IOException;
+import java.io.InputStreamReader;
 import java.util.ArrayList;
-import java.util.Scanner;
 import java.util.Stack;
 import semantical.Letter;
 import static semantical.Letter.printLetters;
@@ -39,7 +40,7 @@ public class Verificador {
     /**
      * @param args the command line arguments
      */
-    public static void main(String[] args) {
+    public static void main(String[] args) throws IOException {
         if (args.length != 1) {
             System.out.println("Usage: java verificador [concat.al]");
             return;
@@ -58,7 +59,7 @@ public class Verificador {
         
         System.out.println("");
         
-        Scanner input = new Scanner(System.in);
+        BufferedReader br = new BufferedReader(new InputStreamReader(System.in));
         
         
         for(Transition t : T) {
@@ -77,8 +78,10 @@ public class Verificador {
         }
         
         
-        while(true) {
-            String word = input.nextLine();
+        String word;
+        
+        while((word = br.readLine()) != null) {
+            
             visited = new ArrayList<State>();
             hasPath = false;
             recognize(word);
