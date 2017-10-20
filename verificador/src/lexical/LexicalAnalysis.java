@@ -91,10 +91,7 @@ public class LexicalAnalysis {
             }
         }
         if(e==4) {
-            if(l.token.equals("af")) {
-              l.type = TokenType.AF;
-            }
-            else if(l.type==TokenType.UNEXPECTED_EOF) {
+            if(l.type==TokenType.UNEXPECTED_EOF) {
                 throw new IOException(line+": Fim de arquivo inesperado");
             }
             else if(l.type==TokenType.INVALID_TOKEN) {

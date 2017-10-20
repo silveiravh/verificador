@@ -57,7 +57,7 @@ public class SyntaticalAnalysis {
     // <af> ::= '{' "af" ':' '[' <states> ',' <letters> ',' <transitions> ',' <inicials> ',' <finals> ']' '}' 
     public void procAf() throws IOException {
         matchToken(TokenType.CBRA_OPEN);
-        matchToken(TokenType.AF);
+        matchToken(TokenType.STRING);
         matchToken(TokenType.COLON);
         matchToken(TokenType.SBRA_OPEN);
         S = procStates();

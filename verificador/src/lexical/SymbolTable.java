@@ -25,8 +25,6 @@ public class SymbolTable {
         st.put("[", TokenType.SBRA_OPEN);
         st.put("]", TokenType.SBRA_CLOSE);
         st.put(",", TokenType.COMMA);
-        
-        st.put("af", TokenType.AF);
     }
     
     public boolean contains(String token) {

@@ -23,9 +23,6 @@ public enum TokenType {
     SBRA_CLOSE,     // ]
     COMMA,          // ,
 
-    // keywords
-    AF,            // af
-
     // others
     STRING,        // string
 };
