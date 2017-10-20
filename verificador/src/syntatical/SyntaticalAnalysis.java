@@ -49,6 +49,7 @@ public class SyntaticalAnalysis {
             }
         } catch(IOException e) {
             System.out.println(e.getMessage());
+            System.exit(1);
         }
         
     }
@@ -88,6 +89,7 @@ public class SyntaticalAnalysis {
             }
         } catch(IOException e) {
             System.out.println(e.getMessage());
+            System.exit(1);
         }
         return S;
     }
@@ -104,6 +106,7 @@ public class SyntaticalAnalysis {
             }
         } catch(IOException e) {
             System.out.println(e.getMessage());
+            System.exit(1);
         }
         return null;
     }
@@ -125,6 +128,7 @@ public class SyntaticalAnalysis {
             }
         } catch(IOException e) {
             System.out.println(e.getMessage());
+            System.exit(1);
         }
         return null;
     }
@@ -141,6 +145,7 @@ public class SyntaticalAnalysis {
             }
         } catch(IOException e) {
             System.out.println(e.getMessage());
+            System.exit(1);
         }
         return null;
     }
@@ -176,6 +181,7 @@ public class SyntaticalAnalysis {
             }
         } catch(IOException e) {
             System.out.println(e.getMessage());
+            System.exit(1);
         }
         return null;
     }
@@ -197,6 +203,7 @@ public class SyntaticalAnalysis {
             }
         } catch(IOException e) {
             System.out.println(e.getMessage());
+            System.exit(1);
         }
         return null;
     }
@@ -218,6 +225,7 @@ public class SyntaticalAnalysis {
             }
         } catch(IOException e) {
             System.out.println(e.getMessage());
+            System.exit(1);
         }
         return null;
     }
