@@ -128,7 +128,7 @@ public class State {
             if(s.i) {
                 System.out.print(" inicial");
             }
-            else if(s.f) {
+            if(s.f) {
                 System.out.print(" final");
             }
             System.out.println("");

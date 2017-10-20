@@ -84,7 +84,7 @@ public class Verificador {
             
             visited = new ArrayList<State>();
             hasPath = false;
-            recognize(word);
+            recognize(word.replace("#", ""));
         }
         
         
@@ -139,7 +139,15 @@ public class Verificador {
     
     public static void findPath(State s){
         State currentState = new State(s.getName(), s.getWord(), s.isI(), s.isFinal()); 
-        System.out.println("Current state: "+currentState.getName()+" "+currentState.getWord());
+        System.out.print("Current state: "+currentState.getName()+" "+currentState.getWord());
+        if(currentState.isI()) {
+            System.out.print(" inicial");
+        }
+        if(currentState.isFinal()) {
+            System.out.print(" final");
+        }
+        
+        System.out.println("");
         
         Stack<State> possibilities = new Stack<State>();
         
@@ -176,7 +184,6 @@ public class Verificador {
         }
         
         while(!possibilities.empty() && !hasPath) {
-            currentState = possibilities.pop();
             /*
             System.out.println(currentState.getFinal());
             if(currentState.getWord().isEmpty()) {
@@ -186,12 +193,14 @@ public class Verificador {
                 System.out.println("final");
             }
             */
-            visited.add(currentState);
+            
             if(currentState.getWord().isEmpty() && currentState.isFinal()) {
                 hasPath = true;
                 return;
             }
             else {
+                currentState = possibilities.pop();
+                visited.add(currentState);
                 findPath(currentState);
             }
         }
@@ -255,6 +264,8 @@ public class Verificador {
         if(t.letter().getSymbol()!='#')
             s.setWord(backward(s.getWord(), t.letter()));
         s.setName(t.from().getName());
+        s.setI(t.from().isI());
+        s.setF(t.from().isFinal());
     }
     
     public static String forward(String s) {
