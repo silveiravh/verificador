@@ -27,6 +27,5 @@ public enum TokenType {
     AF,            // af
 
     // others
-    STATE,         // state
-    LETTER,        // letter
+    STRING,        // string
 };

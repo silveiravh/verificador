@@ -91,10 +91,7 @@ public class LexicalAnalysis {
             }
         }
         if(e==4) {
-            if(l.token.length()==1) {
-                l.type = TokenType.LETTER;
-            }
-            else if(l.token.equals("af")) {
+            if(l.token.equals("af")) {
               l.type = TokenType.AF;
             }
             else if(l.type==TokenType.UNEXPECTED_EOF) {
@@ -104,7 +101,7 @@ public class LexicalAnalysis {
                 throw new IOException(line+": Lexama invalido ["+(char)c+"]");
             }
             else{
-                l.type = TokenType.STATE;
+                l.type = TokenType.STRING;
             }
         }
         return l;

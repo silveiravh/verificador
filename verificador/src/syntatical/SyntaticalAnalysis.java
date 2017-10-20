@@ -89,15 +89,17 @@ public class SyntaticalAnalysis {
         } catch(IOException e) {
             System.out.println(e.getMessage());
         }
-        
         return S;
     }
     
     private State procState() throws IOException {
         try {
-            if(this.current.type==TokenType.STATE) {
+            if(this.current.type==TokenType.STRING) {
+                if(current.token.length()==0) {
+                    throw new IOException(line+": Lexama não esperado ["+current.token+"]");
+                }
                 State s = new State(current.token);
-                matchToken(TokenType.STATE);
+                matchToken(TokenType.STRING);
                 return s;
             }
         } catch(IOException e) {
@@ -129,9 +131,12 @@ public class SyntaticalAnalysis {
    
     private Letter procLetter() throws IOException {
         try {
-            if(this.current.type==TokenType.LETTER) {
+            if(this.current.type==TokenType.STRING) {
+                if(current.token.length()!=1) {
+                    throw new IOException(line+": Lexama não esperado ["+current.token+"]");
+                }
                 Letter l = new Letter(current.token.charAt(0));
-                matchToken(TokenType.LETTER);
+                matchToken(TokenType.STRING);
                 return l;
             }
         } catch(IOException e) {

@@ -74,8 +74,7 @@ public class Verificador {
             if(isFinal(t.to().getName())) {
                 t.to().setFinal(true);
             }
-        }
-        
+        }      
         
         String word;
         
@@ -97,10 +96,8 @@ public class Verificador {
                 System.out.println("Sim");
                 return;
             }
-        }
-        
+        }      
         System.out.println("Não");
-        return;
     }
     
     public static void findPath(State s){
@@ -180,7 +177,6 @@ public class Verificador {
                 
                 findPath(currentState);
         }
-        return;
     }
     
     public static ArrayList<State> getInicials() {
@@ -191,76 +187,11 @@ public class Verificador {
                 inicials.add(s);
             }
         }
-        
         return inicials;
     }
     
     public static ArrayList<Transition> getLambdaTransitions(State s, ArrayList<Transition> T) {
         ArrayList<Transition> lambdaTransitions = new ArrayList<Transition>();
-        
-        
-        /*
-        Debug mode
-        String word = "0000111";
-        Letter l = new Letter('0');
-        State s = S.get(0);
-        s.setWord(word);
-        ArrayList<State> possibilities = new ArrayList<State>();
-        ArrayList<Transition> lambdaTransitions = getLambdaTransitions(s, T);
-        for(Transition t : lambdaTransitions) {
-            doTransition(t, s);
-            possibilities.add(new State(s.getName(), s.getWord(), s.isI(), s.isF()));
-            undoTransition(t, s);
-        }
-        ArrayList<Transition> letterTransitions = getTransitions(s, l, T);
-        for(Transition t : letterTransitions) {
-            doTransition(t, s);
-            System.out.println("word after transitions: "+s.getWord());
-            possibilities.add(new State(s.getName(), s.getWord(), s.isI(), s.isF()));
-            undoTransition(t, s);
-        }
-        
-        System.out.println("Possibilities");
-        for (State s1 : possibilities) {
-            System.out.println(s1.getName()+" "+s1.getWord());
-        }
-        */
-        
-        //State s = S.get(3);
-        //System.out.println(s.getName()+" "+s.getFinal());
-        
-        //System.out.println(isFinal("i1"));
-        /*
-        Debug mode
-        String word = "0000111";
-        Letter l = new Letter('0');
-        State s = S.get(0);
-        s.setWord(word);
-        ArrayList<State> possibilities = new ArrayList<State>();
-        ArrayList<Transition> lambdaTransitions = getLambdaTransitions(s, T);
-        for(Transition t : lambdaTransitions) {
-            doTransition(t, s);
-            possibilities.add(new State(s.getName(), s.getWord(), s.isI(), s.isF()));
-            undoTransition(t, s);
-        }
-        ArrayList<Transition> letterTransitions = getTransitions(s, l, T);
-        for(Transition t : letterTransitions) {
-            doTransition(t, s);
-            System.out.println("word after transitions: "+s.getWord());
-            possibilities.add(new State(s.getName(), s.getWord(), s.isI(), s.isF()));
-            undoTransition(t, s);
-        }
-        
-        System.out.println("Possibilities");
-        for (State s1 : possibilities) {
-            System.out.println(s1.getName()+" "+s1.getWord());
-        }
-        */
-        
-        //State s = S.get(3);
-        //System.out.println(s.getName()+" "+s.getFinal());
-        
-        //System.out.println(isFinal("i1"));
         
         Transition stationary = new Transition(s, new Letter('#'), s);
         lambdaTransitions.add(stationary);
@@ -268,82 +199,16 @@ public class Verificador {
         for(Transition t : T) {
             if(t.from().getName().equals(s.getName()) && t.letter().getSymbol()=='#') {
                 lambdaTransitions.add(t);
-        
-        
-        /*
-        Debug mode
-        String word = "0000111";
-        Letter l = new Letter('0');
-        State s = S.get(0);
-        s.setWord(word);
-        ArrayList<State> possibilities = new ArrayList<State>();
-        ArrayList<Transition> lambdaTransitions = getLambdaTransitions(s, T);
-        for(Transition t : lambdaTransitions) {
-            doTransition(t, s);
-            possibilities.add(new State(s.getName(), s.getWord(), s.isI(), s.isF()));
-            undoTransition(t, s);
-        }
-        ArrayList<Transition> letterTransitions = getTransitions(s, l, T);
-        for(Transition t : letterTransitions) {
-            doTransition(t, s);
-            System.out.println("word after transitions: "+s.getWord());
-            possibilities.add(new State(s.getName(), s.getWord(), s.isI(), s.isF()));
-            undoTransition(t, s);
-        }
-        
-        System.out.println("Possibilities");
-        for (State s1 : possibilities) {
-            System.out.println(s1.getName()+" "+s1.getWord());
-        }
-        */
-        
-        //State s = S.get(3);
-        //System.out.println(s.getName()+" "+s.getFinal());
-        
-        //System.out.println(isFinal("i1"));
-        /*
-        Debug mode
-        String word = "0000111";
-        Letter l = new Letter('0');
-        State s = S.get(0);
-        s.setWord(word);
-        ArrayList<State> possibilities = new ArrayList<State>();
-        ArrayList<Transition> lambdaTransitions = getLambdaTransitions(s, T);
-        for(Transition t : lambdaTransitions) {
-            doTransition(t, s);
-            possibilities.add(new State(s.getName(), s.getWord(), s.isI(), s.isF()));
-            undoTransition(t, s);
-        }
-        ArrayList<Transition> letterTransitions = getTransitions(s, l, T);
-        for(Transition t : letterTransitions) {
-            doTransition(t, s);
-            System.out.println("word after transitions: "+s.getWord());
-            possibilities.add(new State(s.getName(), s.getWord(), s.isI(), s.isF()));
-            undoTransition(t, s);
-        }
-        
-        System.out.println("Possibilities");
-        for (State s1 : possibilities) {
-            System.out.println(s1.getName()+" "+s1.getWord());
-        }
-        */
-        
-        //State s = S.get(3);
-        //System.out.println(s.getName()+" "+s.getFinal());
-        
-        //System.out.println(isFinal("i1"));
             }
         }
-        
         return lambdaTransitions;
     }
     
     public static Letter getNextLetter(String word) {
         if(!word.isEmpty()) {
             Letter l = new Letter(word.charAt(0));
-        
-        return l;
-        }
+            return l;
+        }  
         return null;
     }
     
@@ -355,7 +220,6 @@ public class Verificador {
                 transitions.add(t);
             }
         }
-        
         return transitions;
     }
     
