@@ -61,7 +61,6 @@ public class Verificador {
         
         BufferedReader br = new BufferedReader(new InputStreamReader(System.in));
         
-        
         for(Transition t : T) {
             if(isInicial(t.from().getName())) {
                 t.from().setI(true);
@@ -84,7 +83,7 @@ public class Verificador {
             
             visited = new ArrayList<State>();
             hasPath = false;
-            recognize(word.replace("#", ""));
+            recognize(word);
         }
         
         
@@ -154,28 +153,46 @@ public class Verificador {
         ArrayList<Transition> lambdaTransitions = new ArrayList<Transition>();
         ArrayList<Transition> letterTransitions = new ArrayList<Transition>();
         
+        Letter l = getNextLetter(currentState.getWord());
+        
         lambdaTransitions = getLambdaTransitions(currentState, T);
         for(Transition t : lambdaTransitions) {
-            doTransition(t, currentState);
+            if(l!=null) {
+                doTransition(t, currentState, l.getSymbol());
+            }
+            else {
+                doTransition(t, currentState);
+            }
             if(!isVisited(currentState)) {        
                 possibilities.push(new State(currentState.getName(), currentState.getWord(), currentState.isI(), currentState.isFinal()));
             }
-            undoTransition(t, currentState);
+            if(l!=null) {
+                undoTransition(t, currentState, l.getSymbol());
+            }
+                
+            else {
+                undoTransition(t, currentState);
+            }
         }
         
-        
-        Letter l = getNextLetter(currentState.getWord());
-        
-        if(l!=null) {
+        if(l!=null && l.getSymbol()!='#') {
             letterTransitions = getTransitions(currentState, l , T);
         }
         for(Transition t : letterTransitions) {
-            doTransition(t, currentState);
+            if(l!=null) {
+                doTransition(t, currentState, l.getSymbol());
+            }
+            else {
+                doTransition(t, currentState);
+            }
             if(!isVisited(currentState)) {  
             
                 possibilities.push(new State(currentState.getName(), currentState.getWord(), currentState.isI(), currentState.isFinal()));
             }
-            undoTransition(t, currentState);
+            if(l!=null) {
+                undoTransition(t, currentState);
+            }
+            
         }
                 
         System.out.println("Possibilities");
@@ -212,11 +229,17 @@ public class Verificador {
     public static ArrayList<Transition> getLambdaTransitions(State s, ArrayList<Transition> T) {
         ArrayList<Transition> lambdaTransitions = new ArrayList<Transition>();
         
+        Transition stationary = new Transition(s, new Letter('#'), s);
+        lambdaTransitions.add(stationary);
+        
         for(Transition t : T) {
             if(t.from().getName().equals(s.getName()) && t.letter().getSymbol()=='#') {
                 lambdaTransitions.add(t);
             }
         }
+        
+        
+        
         
         return lambdaTransitions;
     }
@@ -242,12 +265,32 @@ public class Verificador {
         return transitions;
     }
     
+    public static void doTransition(Transition t, State s, char lastSymbolRead) {
+        if(t.letter().getSymbol()!='#')
+            s.setWord(forward(s.getWord()));
+        else if(t.letter().getSymbol()=='#' && lastSymbolRead=='#')
+            s.setWord(forward(s.getWord()));
+        s.setName(t.to().getName());
+        s.setI(t.to().isI());
+        s.setF(t.to().isFinal());
+    }
+    
     public static void doTransition(Transition t, State s) {
         if(t.letter().getSymbol()!='#')
             s.setWord(forward(s.getWord()));
         s.setName(t.to().getName());
         s.setI(t.to().isI());
         s.setF(t.to().isFinal());
+    }
+    
+    public static void undoTransition(Transition t, State s, char lastSymbolRead) {
+        if(t.letter().getSymbol()!='#')
+            s.setWord(backward(s.getWord(), t.letter()));
+        else if(t.letter().getSymbol()=='#' && lastSymbolRead=='#')
+            s.setWord(backward(s.getWord(), t.letter()));
+        s.setName(t.from().getName());
+        s.setI(t.from().isI());
+        s.setF(t.from().isFinal());
     }
     
     public static void undoTransition(Transition t, State s) {
