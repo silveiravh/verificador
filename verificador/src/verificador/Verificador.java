@@ -63,16 +63,16 @@ public class Verificador {
         
         for(Transition t : T) {
             if(isInicial(t.from().getName())) {
-                t.from().setI(true);
+                t.from().setInicial(true);
             }
             if(isFinal(t.from().getName())) {
-                t.from().setF(true);
+                t.from().setFinal(true);
             }
             if(isInicial(t.to().getName())) {
-                t.to().setI(true);
+                t.to().setInicial(true);
             }
             if(isFinal(t.to().getName())) {
-                t.to().setF(true);
+                t.to().setFinal(true);
             }
         }
         
@@ -85,39 +85,6 @@ public class Verificador {
             hasPath = false;
             recognize(word);
         }
-        
-        
-        /*
-        Debug mode
-        String word = "0000111";
-        Letter l = new Letter('0');
-        State s = S.get(0);
-        s.setWord(word);
-        ArrayList<State> possibilities = new ArrayList<State>();
-        ArrayList<Transition> lambdaTransitions = getLambdaTransitions(s, T);
-        for(Transition t : lambdaTransitions) {
-            doTransition(t, s);
-            possibilities.add(new State(s.getName(), s.getWord(), s.isI(), s.isF()));
-            undoTransition(t, s);
-        }
-        ArrayList<Transition> letterTransitions = getTransitions(s, l, T);
-        for(Transition t : letterTransitions) {
-            doTransition(t, s);
-            System.out.println("word after transitions: "+s.getWord());
-            possibilities.add(new State(s.getName(), s.getWord(), s.isI(), s.isF()));
-            undoTransition(t, s);
-        }
-        
-        System.out.println("Possibilities");
-        for (State s1 : possibilities) {
-            System.out.println(s1.getName()+" "+s1.getWord());
-        }
-        */
-        
-        //State s = S.get(3);
-        //System.out.println(s.getName()+" "+s.getFinal());
-        
-        //System.out.println(isFinal("i1"));
     }
     
     public static void recognize(String word) {
@@ -137,9 +104,9 @@ public class Verificador {
     }
     
     public static void findPath(State s){
-        State currentState = new State(s.getName(), s.getWord(), s.isI(), s.isFinal()); 
+        State currentState = new State(s.getName(), s.getWord(), s.isInicial(), s.isFinal()); 
         System.out.print("Current state: "+currentState.getName()+" "+currentState.getWord());
-        if(currentState.isI()) {
+        if(currentState.isInicial()) {
             System.out.print(" inicial");
         }
         if(currentState.isFinal()) {
@@ -164,7 +131,7 @@ public class Verificador {
                 doTransition(t, currentState);
             }
             if(!isVisited(currentState)) {        
-                possibilities.push(new State(currentState.getName(), currentState.getWord(), currentState.isI(), currentState.isFinal()));
+                possibilities.push(new State(currentState.getName(), currentState.getWord(), currentState.isInicial(), currentState.isFinal()));
             }
             if(l!=null) {
                 undoTransition(t, currentState, l.getSymbol());
@@ -187,7 +154,7 @@ public class Verificador {
             }
             if(!isVisited(currentState)) {  
             
-                possibilities.push(new State(currentState.getName(), currentState.getWord(), currentState.isI(), currentState.isFinal()));
+                possibilities.push(new State(currentState.getName(), currentState.getWord(), currentState.isInicial(), currentState.isFinal()));
             }
             if(l!=null) {
                 undoTransition(t, currentState);
@@ -195,10 +162,12 @@ public class Verificador {
             
         }
                 
-        System.out.println("Possibilities");
+        System.out.println("Possibilities:");
         for(State s1 : possibilities) {
             System.out.println(s1.getName()+" "+s1.getWord());
         }
+        
+        System.out.println("");
         
         if(currentState.getWord().isEmpty() && currentState.isFinal()) {
                hasPath = true;
@@ -238,9 +207,6 @@ public class Verificador {
             }
         }
         
-        
-        
-        
         return lambdaTransitions;
     }
     
@@ -271,16 +237,16 @@ public class Verificador {
         else if(t.letter().getSymbol()=='#' && lastSymbolRead=='#')
             s.setWord(forward(s.getWord()));
         s.setName(t.to().getName());
-        s.setI(t.to().isI());
-        s.setF(t.to().isFinal());
+        s.setInicial(t.to().isInicial());
+        s.setFinal(t.to().isFinal());
     }
     
     public static void doTransition(Transition t, State s) {
         if(t.letter().getSymbol()!='#')
             s.setWord(forward(s.getWord()));
         s.setName(t.to().getName());
-        s.setI(t.to().isI());
-        s.setF(t.to().isFinal());
+        s.setInicial(t.to().isInicial());
+        s.setFinal(t.to().isFinal());
     }
     
     public static void undoTransition(Transition t, State s, char lastSymbolRead) {
@@ -289,16 +255,16 @@ public class Verificador {
         else if(t.letter().getSymbol()=='#' && lastSymbolRead=='#')
             s.setWord(backward(s.getWord(), t.letter()));
         s.setName(t.from().getName());
-        s.setI(t.from().isI());
-        s.setF(t.from().isFinal());
+        s.setInicial(t.from().isInicial());
+        s.setFinal(t.from().isFinal());
     }
     
     public static void undoTransition(Transition t, State s) {
         if(t.letter().getSymbol()!='#')
             s.setWord(backward(s.getWord(), t.letter()));
         s.setName(t.from().getName());
-        s.setI(t.from().isI());
-        s.setF(t.from().isFinal());
+        s.setInicial(t.from().isInicial());
+        s.setFinal(t.from().isFinal());
     }
     
     public static String forward(String s) {

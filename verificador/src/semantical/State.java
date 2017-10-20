@@ -15,33 +15,23 @@ import static verificador.Verificador.visited;
  */
 public class State {
     private String name;
+    String word;
     private boolean i;
     private boolean f;
-    String word;
     
-    public State(String name, boolean i, boolean f) {
+    public State(String name) {
         this.name = name;
-        this.i = i;
-        this.f = f;
         this.word = "";
-    }
+        this.i = false;
+        this.f = false;
+    }  
     
-    public State(String name, String word, Boolean i, Boolean f) {
+    public State(String name, String word, boolean i, boolean f) {
         this.name = name;
         this.word = word;
         this.i = i;
         this.f = f;
     }
-
-    public void setI(boolean i) {
-        this.i = i;
-    }
-
-    public void setF(boolean f) {
-        this.f = f;
-    }
-
-    
     
     public String getName() {
         return name;
@@ -51,17 +41,21 @@ public class State {
         this.name = name;
     }
     
+    public boolean isInicial() {
+        return this.i;
+    }
+    
     public static boolean isInicial(String stateName) {
         for(State s : S) {
             if(s.getName().equals(stateName)) {
-                return s.isI();
+                return s.isInicial();
             }
         }
         return false;
     }
     
-    public boolean isInicial() {
-        return this.i;
+    public void setInicial(boolean i) {
+        this.i = i;
     }
     
     public static void setInicial(State state) {
@@ -85,6 +79,10 @@ public class State {
         return false;
     }
     
+    public void setFinal(boolean f) {
+        this.f = f;
+    }
+    
     public static void setFinal(State state) {
         for(State s : S) {
             if(s.name.equals(state.name)) {
@@ -95,10 +93,6 @@ public class State {
 
     public String getWord() {
         return word;
-    }
-
-    public boolean isI() {
-        return this.i;
     }
     
     public void setWord(String word) {
@@ -112,13 +106,6 @@ public class State {
                 return true;
         }
         return false;
-    }
-    
-    public int getFinal() {
-        if(this.f)
-            return 1;
-        else
-            return 0;
     }
     
     public static void printStates(ArrayList<State> S) {

@@ -96,8 +96,7 @@ public class SyntaticalAnalysis {
     private State procState() throws IOException {
         try {
             if(this.current.type==TokenType.STATE) {
-                //System.out.println(current.token+" "+isInicial(current.token)+" "+isFinal(current.token));
-                State s = new State(current.token, isInicial(current.token), isFinal(current.token));
+                State s = new State(current.token);
                 matchToken(TokenType.STATE);
                 return s;
             }
