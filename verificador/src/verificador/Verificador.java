@@ -27,6 +27,8 @@ import static semantical.Transition.printTransitions;
  * @author silveira
  */
 public class Verificador {
+    public static boolean debug = false;
+    
     public static ArrayList<State> S = new ArrayList<State>();
     public static ArrayList<Letter> L = new ArrayList<Letter>();
     public static ArrayList<Transition> T = new ArrayList<Transition>();
@@ -41,24 +43,34 @@ public class Verificador {
      * @param args the command line arguments
      */
     public static void main(String[] args) throws IOException {
-        if (args.length != 1) {
-            System.out.println("Usage: java verificador/Verificador [concat.al]");
-            return;
-        }
-
         try {
+            if (args.length != 1 && args.length != 2) {
+                throw new IOException("Usage: java verificador/Verificador filename [-d]");
+            }
+            if(args.length==2) {
+                if(args[1].equals("-d")) {
+                    debug = true;
+                }
+                else {
+                    throw new IOException("Invalid option: "+args[1]);
+                }
+            }
             LexicalAnalysis l = new LexicalAnalysis(args[0]);
             SyntaticalAnalysis s = new SyntaticalAnalysis(l);
             s.procAf();
-            printStates(S);
-            printLetters(L);
-            printTransitions(T);
+            if(debug) {
+                printStates(S);
+                printLetters(L);
+                printTransitions(T);
+            }
         } catch (Exception e) {
             System.err.println(e.getMessage());
             System.exit(1);
         }
         
-        System.out.println("");
+        if(debug) {
+            System.out.println("");
+        }
         
         BufferedReader br = new BufferedReader(new InputStreamReader(System.in));
         
@@ -80,11 +92,12 @@ public class Verificador {
         String word;
         
         while((word = br.readLine()) != null) {
-            
             visited = new ArrayList<State>();
             hasPath = false;
             recognize(word);
-            System.out.println("0000");
+            if(debug) {
+                System.out.println("");
+            }
         }
     }
     
@@ -104,15 +117,16 @@ public class Verificador {
     
     public static void findPath(State s){
         State currentState = new State(s.getName(), s.getWord(), s.isInicial(), s.isFinal()); 
-        System.out.print("Current state: "+currentState.getName()+" "+currentState.getWord());
-        if(currentState.isInicial()) {
-            System.out.print(" inicial");
+        if(debug) {
+            System.out.print("Current state: "+currentState.getName()+" "+currentState.getWord());
+            if(currentState.isInicial()) {
+                System.out.print(" inicial");
+            }
+            if(currentState.isFinal()) {
+                System.out.print(" final");
+            }
+            System.out.println("");
         }
-        if(currentState.isFinal()) {
-            System.out.print(" final");
-        }
-        
-        System.out.println("");
         
         Stack<State> possibilities = new Stack<State>();
         
@@ -160,13 +174,14 @@ public class Verificador {
             }
             
         }
-                
-        System.out.println("Possibilities:");
-        for(State s1 : possibilities) {
-            System.out.println(s1.getName()+" "+s1.getWord());
-        }
         
-        System.out.println("");
+        if(debug) {
+            System.out.println("Possibilities:");
+            for(State s1 : possibilities) {
+                System.out.println(s1.getName()+" "+s1.getWord());
+            }
+            System.out.println("");
+        }
         
         if(currentState.getWord().isEmpty() && currentState.isFinal()) {
                hasPath = true;
@@ -175,9 +190,9 @@ public class Verificador {
         
         while(!possibilities.empty() && !hasPath) {
             currentState = possibilities.pop();
-                visited.add(currentState);
-                
-                findPath(currentState);
+            visited.add(currentState);
+            
+            findPath(currentState);
         }
     }
     
