@@ -42,7 +42,7 @@ public class Verificador {
      */
     public static void main(String[] args) throws IOException {
         if (args.length != 1) {
-            System.out.println("Usage: java verificador [concat.al]");
+            System.out.println("Usage: java verificador/Verificador [concat.al]");
             return;
         }
 
@@ -84,6 +84,7 @@ public class Verificador {
             visited = new ArrayList<State>();
             hasPath = false;
             recognize(word);
+            System.out.println("0000");
         }
     }
     
