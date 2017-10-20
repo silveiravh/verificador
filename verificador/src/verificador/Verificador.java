@@ -183,7 +183,14 @@ public class Verificador {
             System.out.println(s1.getName()+" "+s1.getWord());
         }
         
+        if(currentState.getWord().isEmpty() && currentState.isFinal()) {
+               hasPath = true;
+               return;
+        }
+        
         while(!possibilities.empty() && !hasPath) {
+            currentState = possibilities.pop();
+                visited.add(currentState);
             /*
             System.out.println(currentState.getFinal());
             if(currentState.getWord().isEmpty()) {
@@ -199,8 +206,7 @@ public class Verificador {
                 return;
             }
             else {
-                currentState = possibilities.pop();
-                visited.add(currentState);
+                
                 findPath(currentState);
             }
         }
