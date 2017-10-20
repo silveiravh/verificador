@@ -191,24 +191,8 @@ public class Verificador {
         while(!possibilities.empty() && !hasPath) {
             currentState = possibilities.pop();
                 visited.add(currentState);
-            /*
-            System.out.println(currentState.getFinal());
-            if(currentState.getWord().isEmpty()) {
-                System.out.println("vazio");
-            }
-            if(currentState.isFinal()) {
-                System.out.println("final");
-            }
-            */
-            
-            if(currentState.getWord().isEmpty() && currentState.isFinal()) {
-                hasPath = true;
-                return;
-            }
-            else {
                 
                 findPath(currentState);
-            }
         }
         return;
     }
