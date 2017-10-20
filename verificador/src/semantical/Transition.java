@@ -37,7 +37,7 @@ public class Transition {
     }
     
     public static void printTransitions(ArrayList<Transition> T) {
-        System.out.println("Transições:");
+        System.out.println("Transitions:");
         for(Transition t : T) {
             System.out.println("from: "+t.from.getName()+" to "+t.to.getName()+" consuming "+t.letter.getSymbol());
         }

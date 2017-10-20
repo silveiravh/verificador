@@ -92,10 +92,10 @@ public class LexicalAnalysis {
         }
         if(e==4) {
             if(l.type==TokenType.UNEXPECTED_EOF) {
-                throw new IOException(line+": Fim de arquivo inesperado");
+                throw new IOException(line+": Unexpected end of file");
             }
             else if(l.type==TokenType.INVALID_TOKEN) {
-                throw new IOException(line+": Lexama invalido ["+(char)c+"]");
+                throw new IOException(line+": Invalid lexeme ["+(char)c+"]");
             }
             else{
                 l.type = TokenType.STRING;

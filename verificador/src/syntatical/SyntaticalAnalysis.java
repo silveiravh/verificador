@@ -45,7 +45,7 @@ public class SyntaticalAnalysis {
                 current = lex.nextToken();
             }
             else {
-                throw new IOException(line+": Lexama não esperado ["+current.token+"]");
+                throw new IOException(line+": Unexpected lexeme ["+current.token+"]");
             }
         } catch(IOException e) {
             System.out.println(e.getMessage());
@@ -98,7 +98,7 @@ public class SyntaticalAnalysis {
         try {
             if(this.current.type==TokenType.STRING) {
                 if(current.token.length()==0) {
-                    throw new IOException(line+": Lexama não esperado ["+current.token+"]");
+                    throw new IOException(line+": Unexpected lexeme ["+current.token+"]");
                 }
                 State s = new State(current.token);
                 matchToken(TokenType.STRING);
@@ -137,7 +137,7 @@ public class SyntaticalAnalysis {
         try {
             if(this.current.type==TokenType.STRING) {
                 if(current.token.length()!=1) {
-                    throw new IOException(line+": Lexama não esperado ["+current.token+"]");
+                    throw new IOException(line+": Unexpected lexeme ["+current.token+"]");
                 }
                 Letter l = new Letter(current.token.charAt(0));
                 matchToken(TokenType.STRING);

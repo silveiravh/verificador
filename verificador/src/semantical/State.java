@@ -109,7 +109,7 @@ public class State {
     }
     
     public static void printStates(ArrayList<State> S) {
-        System.out.println("Estados:");
+        System.out.println("States:");
         for(State s : S) {
             System.out.print("Nome: "+s.name);
             if(s.i) {
