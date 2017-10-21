@@ -30,9 +30,4 @@ public class SymbolTable {
     public boolean contains(String token) {
         return st.containsKey(token);
     }
-
-    public TokenType find(String token) {
-        return this.contains(token) ?
-            st.get(token) : TokenType.INVALID_TOKEN;
-    }
 }

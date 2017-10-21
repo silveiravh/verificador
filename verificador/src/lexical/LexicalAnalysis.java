@@ -35,8 +35,10 @@ public class LexicalAnalysis {
     public Lexeme nextToken() throws IOException {
         Lexeme l = new Lexeme("", null);
         int e = 1, c = 0;
+        String token = "";
         while(e!=3 && e!=4){
             c = input.read();
+            token += (char)c;
             switch(e){
                 case 1: if(c==-1) {
                             l.type = TokenType.END_OF_FILE;
@@ -103,14 +105,23 @@ public class LexicalAnalysis {
                             e = 4;
                             break;
                         }
-                        else{
+                        token = ""+(char)c;
+                        if(!st.contains(token)){
                             l.type = TokenType.INVALID_TOKEN;
+                            e = 4;
+                            break;
+                        }
+                        else {
+                            l.type = TokenType.UNEXPECTED_TOKEN;
                             e = 4;
                         }
             }
         }
         if(e==4) {
-            if(l.type==TokenType.UNEXPECTED_EOF) {
+            if(l.type==TokenType.UNEXPECTED_TOKEN) {
+                throw new IOException(line+": Unexpected lexeme ["+token+"]");
+            }
+            else if(l.type==TokenType.UNEXPECTED_EOF) {
                 throw new IOException(line+": Unexpected end of file");
             }
             else if(l.type==TokenType.INVALID_TOKEN) {

@@ -14,6 +14,7 @@ public enum TokenType {
     UNEXPECTED_EOF,
     INVALID_TOKEN,
     END_OF_FILE,
+    UNEXPECTED_TOKEN,
 
     // symbols
     CBRA_OPEN,      // {
