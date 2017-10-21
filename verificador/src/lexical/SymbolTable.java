@@ -30,4 +30,15 @@ public class SymbolTable {
     public boolean contains(String token) {
         return st.containsKey(token);
     }
+    
+    public String getSymbol(TokenType t) {
+        for ( Map.Entry<String, TokenType> entry : st.entrySet()) {
+            String token = entry.getKey();
+            TokenType type = entry.getValue();
+            if(type==t) {
+                return token;
+            }          
+        }
+        return null;
+    }
 }

@@ -18,6 +18,7 @@ import java.util.Map;
 import static semantical.State.setFinal;
 import static semantical.State.setInicial;
 import static lexical.LexicalAnalysis.line;
+import static lexical.LexicalAnalysis.st;
 import static semantical.State.isFinal;
 import static semantical.State.isInicial;
 import static verificador.Verificador.S;
@@ -50,7 +51,12 @@ public class SyntaticalAnalysis {
                 current = lex.nextToken();
             }
             else if(current.type!=TokenType.END_OF_FILE && current.type!=TokenType.UNEXPECTED_EOF && current.type!=TokenType.INVALID_TOKEN){
-                throw new IOException(line+": Unexpected lexeme ["+current.type+"]");
+                if(current.type==TokenType.STRING) {
+                    throw new IOException(line+": Unexpected lexeme ["+current.token+"]");
+                }
+                else {
+                    throw new IOException(line+": Unexpected lexeme ["+st.getSymbol(current.type)+"]");
+                } 
             }
         } catch(IOException e) {
             System.out.println(e.getMessage());

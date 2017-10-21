@@ -19,7 +19,7 @@ import java.io.PushbackInputStream;
 public class LexicalAnalysis {
     public static int line;
     private PushbackInputStream input;
-    private SymbolTable st = new SymbolTable();
+    public static SymbolTable st = new SymbolTable();
     
     public LexicalAnalysis(String filename) throws IOException {
         try {
