@@ -50,7 +50,7 @@ public class SyntaticalAnalysis {
                 current = lex.nextToken();
             }
             else if(current.type!=TokenType.END_OF_FILE && current.type!=TokenType.UNEXPECTED_EOF && current.type!=TokenType.INVALID_TOKEN){
-                throw new IOException(line+": Unexpected lexeme ["+current.token+"]"+current.type);
+                throw new IOException(line+": Unexpected lexeme ["+current.token+"]");
             }
             else if(current.type==TokenType.END_OF_FILE) {
                 throw new IOException(line+": Unexpected end of file");

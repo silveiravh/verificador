@@ -103,7 +103,7 @@ public class LexicalAnalysis {
                             e = 4;
                             break;
                         }
-                        else {
+                        else{
                             l.type = TokenType.INVALID_TOKEN;
                             e = 4;
                         }
