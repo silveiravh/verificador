@@ -33,12 +33,10 @@ public class LexicalAnalysis {
     }
 
     public Lexeme nextToken() throws IOException {
-        Lexeme l = new Lexeme("", null);
+        Lexeme l = new Lexeme("", TokenType.END_OF_FILE);
         int e = 1, c = 0;
-        String token = "";
         while(e!=3 && e!=4){
             c = input.read();
-            token += (char)c;
             switch(e){
                 case 1: if(c==-1) {
                             l.type = TokenType.END_OF_FILE;
@@ -77,7 +75,8 @@ public class LexicalAnalysis {
                                 case ',': l.type = TokenType.COMMA;
                                           e = 3;
                                           break;
-                                default: l.type = TokenType.INVALID_TOKEN;
+                                default: l.token += (char)c;
+                                         l.type = TokenType.INVALID_TOKEN;
                                          e = 4;
                             }
                         }
@@ -88,13 +87,8 @@ public class LexicalAnalysis {
                             e = 4;
                             break;
                         }
-                        else if(c==' ' || c=='\t' || c=='\r') {
+                        else if(c==' ') {
                             e = 2;
-                        }
-                        else if(c=='\n') {
-                            line++;
-                            e = 2;
-                            break;
                         }
                         else if(Character.isLetterOrDigit(c) || c=='#') {
                             l.token += (char)c;
@@ -105,29 +99,21 @@ public class LexicalAnalysis {
                             e = 4;
                             break;
                         }
-                        token = ""+(char)c;
-                        if(!st.contains(token)){
-                            l.type = TokenType.INVALID_TOKEN;
-                            e = 4;
-                            break;
-                        }
                         else {
-                            l.type = TokenType.UNEXPECTED_TOKEN;
+                            l.token += (char)c;
+                            l.type = TokenType.INVALID_TOKEN;
                             e = 4;
                         }
             }
         }
         if(e==4) {
-            if(l.type==TokenType.UNEXPECTED_TOKEN) {
-                throw new IOException(line+": Unexpected lexeme ["+token+"]");
-            }
-            else if(l.type==TokenType.UNEXPECTED_EOF) {
+            if(l.type==TokenType.UNEXPECTED_EOF) {
                 throw new IOException(line+": Unexpected end of file");
             }
             else if(l.type==TokenType.INVALID_TOKEN) {
-                throw new IOException(line+": Invalid lexeme ["+(char)c+"]");
+                throw new IOException(line+": Invalid lexeme ["+l.token+"]");
             }
-            else if(l.type!=TokenType.END_OF_FILE){
+            else {
                 l.type = TokenType.STRING;
             }
         }
