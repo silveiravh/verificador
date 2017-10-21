@@ -25,7 +25,7 @@ public class LexicalAnalysis {
         try {
             input = new PushbackInputStream(new FileInputStream(filename));
         } catch (Exception e) {
-            System.out.println("Unable to open file"+filename);
+            System.out.println("Unable to open file "+filename);
             System.exit(1);
         }
         
@@ -33,14 +33,15 @@ public class LexicalAnalysis {
     }
 
     public Lexeme nextToken() throws IOException {
-        Lexeme l = new Lexeme("", TokenType.END_OF_FILE);
-        int e = 1, c=0;
+        Lexeme l = new Lexeme("", null);
+        int e = 1, c = 0;
         while(e!=3 && e!=4){
             c = input.read();
             switch(e){
                 case 1: if(c==-1) {
                             l.type = TokenType.END_OF_FILE;
                             e = 4;
+                            break;
                         }
                         else if(c==' ' || c=='\t' || c=='\r') {
                             e = 1;
@@ -48,9 +49,11 @@ public class LexicalAnalysis {
                         else if(c=='\n') {
                             line++;
                             e = 1;
+                            break;
                         }
                         else if(c=='\"') {
                             e = 2;
+                            break;
                         }
                         else {
                             switch(c) {
@@ -81,14 +84,29 @@ public class LexicalAnalysis {
                 case 2: if(c==-1) {
                             l.type = TokenType.UNEXPECTED_EOF;
                             e = 4;
+                            break;
                         }
-                        else if(Character.isAlphabetic(c) || Character.isDigit(c) || c=='#') {
+                        else if(c==' ' || c=='\t' || c=='\r') {
+                            e = 2;
+                        }
+                        else if(c=='\n') {
+                            line++;
+                            e = 2;
+                            break;
+                        }
+                        else if(Character.isLetterOrDigit(c) || c=='#') {
                             l.token += (char)c;
                             e = 2;
+                            break;
                         }
                         else if(c=='\"') {
                             e = 4;
-                        } 
+                            break;
+                        }
+                        else {
+                            l.type = TokenType.INVALID_TOKEN;
+                            e = 4;
+                        }
             }
         }
         if(e==4) {
@@ -98,7 +116,7 @@ public class LexicalAnalysis {
             else if(l.type==TokenType.INVALID_TOKEN) {
                 throw new IOException(line+": Invalid lexeme ["+(char)c+"]");
             }
-            else{
+            else if(l.type!=TokenType.END_OF_FILE){
                 l.type = TokenType.STRING;
             }
         }

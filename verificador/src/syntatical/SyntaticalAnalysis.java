@@ -35,17 +35,25 @@ public class SyntaticalAnalysis {
     private LexicalAnalysis lex;
     
     public SyntaticalAnalysis(LexicalAnalysis lex) throws IOException{
-        this.lex = lex;
-        this.current = lex.nextToken();
+        try {
+            this.lex = lex;
+            this.current = lex.nextToken();
+        } catch(IOException e) {
+            System.out.println(e.getMessage());
+            System.exit(1);
+        }
     }
     
     private void matchToken(TokenType type) throws IOException{
         try {
-            if(type == current.type){
+            if(type==current.type){
                 current = lex.nextToken();
             }
-            else {
-                throw new IOException(line+": Unexpected lexeme ["+current.token+"]");
+            else if(current.type!=TokenType.END_OF_FILE && current.type!=TokenType.UNEXPECTED_EOF && current.type!=TokenType.INVALID_TOKEN){
+                throw new IOException(line+": Unexpected lexeme ["+current.token+"]"+current.type);
+            }
+            else if(current.type==TokenType.END_OF_FILE) {
+                throw new IOException(line+": Unexpected end of file");
             }
         } catch(IOException e) {
             System.out.println(e.getMessage());
@@ -136,7 +144,7 @@ public class SyntaticalAnalysis {
     private Letter procLetter() throws IOException {
         try {
             if(this.current.type==TokenType.STRING) {
-                if(current.token.length()!=1) {
+                if(current.token.length()!=1 || current.token.equals(" ")) {
                     throw new IOException(line+": Unexpected lexeme ["+current.token+"]");
                 }
                 Letter l = new Letter(current.token.charAt(0));
