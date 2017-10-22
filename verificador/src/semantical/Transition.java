@@ -39,11 +39,7 @@ public class Transition {
     public static void printTransitions(ArrayList<Transition> T) {
         System.out.println("Transitions:");
         for(Transition t : T) {
-            System.out.println("from: "+t.from.getName()+" to "+t.to.getName()+" consuming "+t.letter.getSymbol());
+            System.out.println("from: "+t.from.getName()+" to "+t.to.getName()+" consuming "+"\""+t.letter.getSymbol()+"\"");
         }
-    }
-    
-    public void printTransition() {
-            System.out.println("from: "+"("+this.from().getName()+", "+from().getWord()+")"+" to "+"("+this.to.getName()+", "+this.to().getWord()+")"+" consuming "+this.letter.getSymbol());
     }
 }

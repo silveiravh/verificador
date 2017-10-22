@@ -52,7 +52,7 @@ public class Verificador {
                     debug = true;
                 }
                 else {
-                    throw new IOException("Invalid option: "+args[1]);
+                    throw new IOException("Invalid option: "+"\""+args[1]+"\"");
                 }
             }
             LexicalAnalysis l = new LexicalAnalysis(args[0]);

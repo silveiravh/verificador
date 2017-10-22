@@ -156,7 +156,7 @@ public class SyntaticalAnalysis {
     private Letter procLetter() throws IOException {
         try {
             if(this.current.type==TokenType.STRING) {
-                if(current.token.length()!=1 || current.token.equals(" ")) {
+                if(current.token.length()!=1) {
                     throw new IOException(line+": Unexpected lexeme ["+current.token+"]");
                 }
                 Letter l = new Letter(current.token.charAt(0));

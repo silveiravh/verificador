@@ -25,7 +25,7 @@ public class LexicalAnalysis {
         try {
             input = new PushbackInputStream(new FileInputStream(filename));
         } catch (Exception e) {
-            System.out.println("Unable to open file "+filename);
+            System.out.println("Unable to open file: "+"\""+filename+"\"");
             System.exit(1);
         }
         

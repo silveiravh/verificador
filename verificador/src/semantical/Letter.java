@@ -30,7 +30,7 @@ public class Letter {
     public static void printLetters(ArrayList<Letter> L) {
         System.out.println("Letters: ");
         for(Letter l : L) {
-            System.out.println("Symbol: "+l.symbol);
+            System.out.println("Symbol: "+"\""+l.symbol+"\"");
         }
         System.out.println("");
     }

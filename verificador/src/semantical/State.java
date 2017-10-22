@@ -111,7 +111,7 @@ public class State {
     public static void printStates(ArrayList<State> S) {
         System.out.println("States:");
         for(State s : S) {
-            System.out.print("Nome: "+s.name);
+            System.out.print("Name: "+"\""+s.name+"\",");
             if(s.i) {
                 System.out.print(" inicial");
             }
