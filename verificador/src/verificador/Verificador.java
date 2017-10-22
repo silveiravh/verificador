@@ -58,6 +58,7 @@ public class Verificador {
             LexicalAnalysis l = new LexicalAnalysis(args[0]);
             SyntaticalAnalysis s = new SyntaticalAnalysis(l);
             s.procAf();
+            l.input.close();
             if(debug) {
                 printStates(S);
                 printLetters(L);
