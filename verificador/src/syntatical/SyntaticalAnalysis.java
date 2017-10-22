@@ -35,6 +35,8 @@ public class SyntaticalAnalysis {
     private Lexeme current;
     private LexicalAnalysis lex;
     
+    private boolean endParsing = false;
+    
     public SyntaticalAnalysis(LexicalAnalysis lex) throws IOException{
         try {
             this.lex = lex;
@@ -48,7 +50,8 @@ public class SyntaticalAnalysis {
     private void matchToken(TokenType type) throws IOException{
         try {
             if(type==current.type){
-                current = lex.nextToken();
+                if(endParsing==false)
+                    current = lex.nextToken();
             }
             else {
                 if(current.type==TokenType.END_OF_FILE) {
@@ -86,6 +89,7 @@ public class SyntaticalAnalysis {
         matchToken(TokenType.COMMA);
         F = procFinals();
         matchToken(TokenType.SBRA_CLOSE);
+        endParsing = true;
         matchToken(TokenType.CBRA_CLOSE);
     }
     
