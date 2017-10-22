@@ -106,6 +106,7 @@ public class Verificador {
         
         for(State i : inicials) {
             i.setWord(word);
+            visited.add(i);
             findPath(i);
             if(hasPath) {
                 System.out.println("Sim");
