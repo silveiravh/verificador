@@ -157,7 +157,7 @@ public class Verificador {
         }
         
         if(l!=null && l.getSymbol()!='#') {
-            letterTransitions = getTransitions(currentState, l , T);
+            letterTransitions = getLetterTransitions(currentState, l , T);
         }
         for(Transition t : letterTransitions) {
             if(l!=null) {
@@ -230,7 +230,7 @@ public class Verificador {
         return null;
     }
     
-    public static ArrayList<Transition> getTransitions(State s, Letter l, ArrayList<Transition> T) {
+    public static ArrayList<Transition> getLetterTransitions(State s, Letter l, ArrayList<Transition> T) {
         ArrayList<Transition> transitions = new ArrayList<Transition>();
         
         for(Transition t : T) {
