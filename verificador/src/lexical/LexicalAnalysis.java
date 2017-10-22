@@ -33,7 +33,7 @@ public class LexicalAnalysis {
     }
 
     public Lexeme nextToken() throws IOException {
-        Lexeme l = new Lexeme("", TokenType.END_OF_FILE);
+        Lexeme l = new Lexeme("", null);
         int e = 1, c = 0;
         while(e!=3 && e!=4){
             c = input.read();
@@ -89,6 +89,7 @@ public class LexicalAnalysis {
                         }
                         else if(c==' ') {
                             e = 2;
+                            break;
                         }
                         else if(Character.isLetterOrDigit(c) || c=='#') {
                             l.token += (char)c;
@@ -100,9 +101,12 @@ public class LexicalAnalysis {
                             break;
                         }
                         else {
-                            l.token += (char)c;
-                            l.type = TokenType.INVALID_TOKEN;
-                            e = 4;
+                            String token = ""+(char)c;
+                            if(!st.contains(token) && c!='\t' && c!='\r' && c!='\n') {
+                                l.token += (char)c;
+                                l.type = TokenType.INVALID_TOKEN;
+                                e = 4;
+                            }
                         }
             }
         }
@@ -113,7 +117,7 @@ public class LexicalAnalysis {
             else if(l.type==TokenType.INVALID_TOKEN) {
                 throw new IOException(line+": Invalid lexeme ["+l.token+"]");
             }
-            else {
+            else if(l.type!=TokenType.END_OF_FILE){
                 l.type = TokenType.STRING;
             }
         }

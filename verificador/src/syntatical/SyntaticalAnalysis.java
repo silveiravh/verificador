@@ -50,13 +50,18 @@ public class SyntaticalAnalysis {
             if(type==current.type){
                 current = lex.nextToken();
             }
-            else if(current.type!=TokenType.END_OF_FILE && current.type!=TokenType.UNEXPECTED_EOF && current.type!=TokenType.INVALID_TOKEN){
-                if(current.type==TokenType.STRING) {
-                    throw new IOException(line+": Unexpected lexeme ["+current.token+"]");
+            else {
+                if(current.type==TokenType.END_OF_FILE) {
+                    throw new IOException(line+": Unexpected end of file");
                 }
-                else {
-                    throw new IOException(line+": Unexpected lexeme ["+st.getSymbol(current.type)+"]");
-                } 
+                else if(current.type!=TokenType.END_OF_FILE && current.type!=TokenType.UNEXPECTED_EOF && current.type!=TokenType.INVALID_TOKEN){
+                    if(current.type==TokenType.STRING) {
+                        throw new IOException(line+": Unexpected lexeme ["+current.token+"]");
+                    }
+                    else {
+                        throw new IOException(line+": Unexpected lexeme ["+st.getSymbol(current.type)+"]");
+                    } 
+                }
             }
         } catch(IOException e) {
             System.out.println(e.getMessage());
