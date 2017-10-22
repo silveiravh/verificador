@@ -87,22 +87,13 @@ public class LexicalAnalysis {
                             e = 4;
                             break;
                         }
-                        else if(Character.isLetterOrDigit(c) || c==' ' || c=='#' || c=='-' || c=='_') {
-                            l.token += (char)c;
-                            e = 2;
-                            break;
-                        }
                         else if(c=='\"') {
                             e = 4;
                             break;
                         }
-                        else {
-                            String token = ""+(char)c;
-                            if(!st.contains(token) && c!='\t' && c!='\r' && c!='\n') {
-                                l.token += (char)c;
-                                l.type = TokenType.INVALID_TOKEN;
-                                e = 4;
-                            }
+                        else if(c!='\t' && c!='\r' && c!='\n') {
+                            l.token += (char)c;
+                            e = 2;
                         }
             }
         }
