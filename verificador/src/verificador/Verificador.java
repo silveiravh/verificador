@@ -72,8 +72,6 @@ public class Verificador {
             System.out.println("");
         }
         
-        BufferedReader br = new BufferedReader(new InputStreamReader(System.in));
-        
         for(Transition t : T) {
             if(isInicial(t.from().getName())) {
                 t.from().setInicial(true);
@@ -89,6 +87,7 @@ public class Verificador {
             }
         }      
         
+        BufferedReader br = new BufferedReader(new InputStreamReader(System.in));
         String word;
         
         while((word = br.readLine()) != null) {
