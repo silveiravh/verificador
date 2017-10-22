@@ -87,11 +87,20 @@ public class LexicalAnalysis {
                             e = 4;
                             break;
                         }
+                        else if(c=='\n') {
+                            line++;
+                            e = 2;
+                            break;
+                        }
+                        else if(c=='\t' || c=='\r') {
+                            e = 2;
+                            break;
+                        }
                         else if(c=='\"') {
                             e = 4;
                             break;
                         }
-                        else if(c!='\t' && c!='\r' && c!='\n') {
+                        else {
                             l.token += (char)c;
                             e = 2;
                         }

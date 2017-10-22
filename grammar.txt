@@ -1,0 +1,6 @@
+<af>          ::= '{' '"' af '"' ':' '[' <states> ',' <letters> ',' <transitions> ',' <inicials> ',' <finals> ']' '}'
+<states>      ::= '[' '"' <state> '"' {, '"' <state> '"'} ']'
+<letters>     ::= '[' '"' <letter> '"' {, '"' <letter> '"'} ']'
+<transitions> ::= '[' '"' <state> '"' ',' '"' <letter> '"' ',' '"' <state> '"' ']' {, '[' '"' <state> '"' ',' '"' <letter> '"' ',' '"' <state> '"' ']'} 
+<inicials>    ::= '[' '"' <state> '"' {, '"' <state> '"'} ']'
+<finals>      ::= '[' '"' <state> '"' {, '"' <state> '"'} ']'
