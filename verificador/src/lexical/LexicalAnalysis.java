@@ -87,11 +87,7 @@ public class LexicalAnalysis {
                             e = 4;
                             break;
                         }
-                        else if(c==' ') {
-                            e = 2;
-                            break;
-                        }
-                        else if(Character.isLetterOrDigit(c) || c=='#') {
+                        else if(Character.isLetterOrDigit(c) || c==' ' || c=='#' || c=='-' || c=='_') {
                             l.token += (char)c;
                             e = 2;
                             break;

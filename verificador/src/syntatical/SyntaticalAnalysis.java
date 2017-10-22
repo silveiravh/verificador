@@ -113,7 +113,7 @@ public class SyntaticalAnalysis {
     private State procState() throws IOException {
         try {
             if(this.current.type==TokenType.STRING) {
-                if(current.token.length()==0) {
+                if(current.token.length()==0 || current.token.equals(" ")) {
                     throw new IOException(line+": Unexpected lexeme ["+current.token+"]");
                 }
                 State s = new State(current.token);
